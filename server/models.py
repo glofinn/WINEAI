@@ -8,7 +8,7 @@ class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, nullable=False)
+    username = db.Column(db.String)
     name = db.Column(db.String,)
     _password_hash = db.Column(db.String)
 
@@ -26,12 +26,14 @@ class User(db.Model, SerializerMixin):
                 raise ValueError('Username must not be empty')
             elif user in users:
                 raise ValueError('Username already in use')
+            return user
         if (key == 'name'):
             if not user:
                 raise ValueError('Name must not be empty')
-            elif user == int:
-                raise ValueError('Name can not be a number')
+            elif not isinstance(user, str):
+                raise ValueError('Name must be a string')
             return user
+        
 
             
 
@@ -44,7 +46,7 @@ class User(db.Model, SerializerMixin):
         password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
         self._password_hash = password_hash.decode('utf-8')
 
-    def authenticate(self, password):
+    def authenticate(self, password: str) -> bool:
         return bcrypt.check_password_hash(
             self._password_hash, password.encode('utf-8'))
 
@@ -53,11 +55,11 @@ class WineLabel(db.Model, SerializerMixin):
     __tablename__ = 'winelabels'
 
     id = db.Column(db.Integer, primary_key=True)
-    generatedimg = db.Column(db.String, nullable = False)
+    image_url = db.Column(db.String)
     style = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    user = db.relationship("User", backpopulates="labels")
+    user = db.relationship("User", back_populates="labels")
 
 
 
@@ -67,12 +69,12 @@ class Wine(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, )
     type = db.Column(db.String, )
-    grapes = db.Column(db.String,)
+    grapes = db.Column(db.String)
     region = db.Column(db.String)
     country = db.Column(db.String)
     story = db.Column(db.String)
     label_id = db.Column(db.Integer, db.ForeignKey('winelabels.id'))
-    user_id = db.Coluymn(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     user = db.relationship("User", back_populates="wines")
 
@@ -81,23 +83,28 @@ class Wine(db.Model, SerializerMixin):
         if (key == 'type'):
             if not wine:
                 raise ValueError('Type cannot be blank')
-            elif wine != 'Red' or 'White' or 'Orange' or 'Petnat':
+            elif wine not in ['Red', 'White','Orange', 'Petnat']:
                 raise ValueError("Type must be either 'Red', 'White', 'Orange' or 'Petnat'")
+            return wine
         if (key == 'grapes'):
             if not wine:
                 raise ValueError('Grapes cannot be blank')
-            elif wine == int:
+            elif not isinstance(wine, str):
                 raise ValueError('Grapes cant be a number')
+            return wine
         if (key == 'region'):
             if not wine:
                 raise ValueError('Region cannot be blank')
-            elif wine == int:
+            elif not isinstance(wine, str):
                 raise ValueError('Region cant be a number')
+            return wine
         if (key == 'country'):
             if not wine:
                 raise ValueError('Country cannot be blank')
-            elif wine == int:
+            elif not isinstance(wine, str):
                 raise ValueError('Country cant be a number')
+            return wine
+        
         
             
         

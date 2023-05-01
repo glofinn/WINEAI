@@ -7,6 +7,7 @@ module.exports = {
         "custom-gray": "#757575",
         "custom-black": "#1E1E1E",
         "rectangle-gray": "#B3B3B3",
+        "text-black": "#242424",
       },
     },
   },

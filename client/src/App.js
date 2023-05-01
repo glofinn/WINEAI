@@ -20,8 +20,11 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Home user={user} setUser={setUser} />} />
+          <Route
+            path="/login"
+            element={<Login user={user} setUser={setUser} />}
+          />
           <Route path="/signup" element={<Signup />} />
         </Routes>
       </BrowserRouter>

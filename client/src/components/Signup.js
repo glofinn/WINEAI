@@ -7,8 +7,8 @@ function Signup() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
-    fullName: "",
-    password: "",
+    name: "",
+    _password_hash: "",
   });
 
   const handleSubmit = (e) => {
@@ -16,7 +16,7 @@ function Signup() {
     const new_user = {
       username: formData["username"],
       name: formData["name"],
-      password_hash: formData["password"],
+      _password_hash: formData["_password_hash"],
     };
     fetch("http://127.0.0.1:5555/signup", {
       method: "POST",
@@ -68,10 +68,10 @@ function Signup() {
           </label>
           <input
             type="text"
-            name="fullName"
+            name="name"
             id="fullName"
             className="block w-full p-2 border rounded-md border-gray-500 bg-rectangle-gray"
-            value={formData.fullName}
+            value={formData.name}
             onChange={handleInputChange}
           />
         </div>
@@ -81,10 +81,10 @@ function Signup() {
           </label>
           <input
             type="password"
-            name="password"
+            name="_password_hash"
             id="password"
             className="block w-full p-2 border rounded-md border-gray-500 bg-rectangle-gray"
-            value={formData.password}
+            value={formData._password_hash}
             onChange={handleInputChange}
           />
         </div>

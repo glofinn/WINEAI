@@ -1,13 +1,59 @@
 import React, { useState } from "react";
-import wineBottle from "../WINESRCS/winebottle.svg"; // Replace this with the actual wine bottle image path
+import wineBottle from "../WINESRCS/winebottlesmaller.svg";
+import axios from "axios";
 
-function LabelMaker() {
+function LabelMaker({ user }) {
   const [formData, setFormData] = useState({
-    name: "",
+    generatedimg: "",
     style: "",
-    grapes: "",
-    year: "",
+    labelPrompt: "",
   });
+
+  const [generatedImages, setGeneratedImages] = useState([]);
+
+  const generateImages = async (style) => {
+    console.log("API Key:", process.env.REACT_APP_OPENAI_API_KEY);
+
+    const response = await axios.post(
+      "https://api.openai.com/v1/images/generations",
+      {
+        prompt: `A detailed lithograph by Aurelien Lefort showcasing an ${style} style natural wine label with esoteric and mystic imagery.`,
+        n: 1,
+        size: "1024x1024",
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
+        },
+      }
+    );
+    setGeneratedImages(response.data.data);
+    return response.data.data;
+  };
+
+  const handleSubmitLabel = async (e) => {
+    e.preventDefault();
+    try {
+      const imageUrls = await generateImages(formData.labelPrompt);
+      saveImageUrls(imageUrls.map((image) => image.url));
+    } catch (error) {
+      console.error("Error generating images:", error.response.data);
+    }
+  };
+
+  const saveImageUrls = async (imageUrls) => {
+    try {
+      const response = await axios.post("labels", {
+        imageUrls: imageUrls,
+        style: formData.labelPrompt,
+        user_id: user.id,
+      });
+      console.log(response.data.message);
+    } catch (error) {
+      console.error("Error saving image URLs:", error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,16 +66,14 @@ function LabelMaker() {
         <div className="relative w-1/4 h-5/6">
           <div className="absolute top-0 left-0 w-full h-full bg-gray-400 opacity-50 z-0"></div>
           <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-10">
-            <div className="w-3/4 h-3/4 bg-white">
-              {[1, 2, 3, 4].map((i) => (
-                <img
-                  key={i}
-                  src={`https://via.placeholder.com/150x150/DAF7A6?text=Image+${i}`}
-                  alt={`Placeholder ${i}`}
-                  className={`w-full h-1/4 object-cover ${i < 4 ? "mb-2" : ""}`}
-                />
-              ))}
-            </div>
+            {generatedImages.map((image, index) => (
+              <img
+                key={index}
+                src={image.url}
+                alt={`Generated Label ${index + 1}`}
+                className="w-full mb-4 object-contain"
+              />
+            ))}
           </div>
         </div>
         <div className="w-full h-5/6 flex justify-center items-center z-0">
@@ -39,14 +83,50 @@ function LabelMaker() {
             className="h-full object-contain z-10"
           />
         </div>
-        <div
-          className="w-1/3 h-5/6 px-8 py-8 z-0"
-          style={{ marginLeft: "auto" }}
-        >
+        <div className="w-2/4 h-5/6 px-8 py-8 z-0 float-right">
           <div className="w-full max-w-md mx-auto">
+            <form
+              className="w-full h-full bg-custom-gray border-8 border-custom-black p-6 text-black mb-8"
+              onSubmit={handleSubmitLabel}
+            >
+              <h2 className="text-2xl font-bold text-center text-black mb-8">
+                Create Your Label
+              </h2>
+
+              <div className="mb-4">
+                <label
+                  className="block text-black text-sm font-bold mb-2"
+                  htmlFor="labelPrompt"
+                >
+                  Label Prompt
+                </label>
+                <select
+                  className="shadow appearance-none rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-rectangle-gray"
+                  id="labelPrompt"
+                  name="labelPrompt"
+                  value={formData.labelPrompt}
+                  onChange={handleChange}
+                >
+                  <option value="">Select a prompt</option>
+                  <option value="Expressionist">Expressionist</option>
+                  <option value="Water-Color">Water-Color</option>
+                  <option value="Abstract">Abstract</option>
+                  <option value="Surreal">Surreal</option>
+                  <option value="Soviet-Propoganda">Soviet Propoganda</option>
+                </select>
+              </div>
+              <div className="flex items-center justify-center">
+                <button
+                  className="bg-rectangle-gray hover:scale-105 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  type="submit"
+                >
+                  Create Label
+                </button>
+              </div>
+            </form>
             <form className="w-full h-full bg-custom-gray border-8 border-custom-black p-6 text-black">
               <h2 className="text-2xl font-bold text-center text-black mb-8">
-                Create your Label
+                Create Your Wine
               </h2>
 
               <div className="mb-4">

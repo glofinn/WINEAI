@@ -16,6 +16,7 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 CORS(app)
 
+app.config['SECRET_KEY']='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'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

@@ -5,10 +5,10 @@ import Navbar from "./Navbar";
 // import titlelogo from "../WINESRCS/titlelogo.svg";
 import "../App.css";
 
-function Home() {
+function Home({ user, setUser }) {
   return (
     <>
-      <Navbar />
+      <Navbar user={user} setUser={setUser} />
       <div className="relative bg-zinc-200 w-full h-screen">
         {/* <div className="absolute top-0 left-0 m-5">
           <img
@@ -28,7 +28,7 @@ function Home() {
         </div>
       </div>
       <Featured />
-      <LabelMaker />
+      <LabelMaker user={user} />
     </>
   );
 }
