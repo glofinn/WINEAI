@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 809a78be2c40
+Revision ID: bb126c9f4abf
 Revises: 
-Create Date: 2023-05-01 10:13:24.300735
+Create Date: 2023-05-01 13:55:47.846869
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '809a78be2c40'
+revision = 'bb126c9f4abf'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,6 +30,7 @@ def upgrade():
     sa.Column('image_url', sa.String(), nullable=True),
     sa.Column('style', sa.String(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_winelabels_user_id_users')),
     sa.PrimaryKeyConstraint('id')
     )
@@ -41,6 +42,7 @@ def upgrade():
     sa.Column('region', sa.String(), nullable=True),
     sa.Column('country', sa.String(), nullable=True),
     sa.Column('story', sa.String(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.Column('label_id', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['label_id'], ['winelabels.id'], name=op.f('fk_wines_label_id_winelabels')),

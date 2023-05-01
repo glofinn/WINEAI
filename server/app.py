@@ -84,6 +84,23 @@ class Wines(Resource):
             wine_dict,
             200
         )
+    def post(self):
+        data = request.get_json()
+        new_wine = Wine(
+            name = data['name'],
+            type = data['type'],
+            grapes = data['grapes'],
+            region = data['region'],
+            country = data['country'],
+            label_id = data['label_id'],
+            user_id = data['user_id'],
+        )
+
+        db.session.add(new_wine)
+        db.session.commit()
+        return {'message': 'New wine created', 'wine': new_wine.to_dict()}, 201
+        
+
 api.add_resource(Wines, '/wines')
 
 
@@ -163,8 +180,23 @@ class Labels(Resource):
         style = data.get('style', '')
         user_id = data.get('user_id', None)
 
-        if not user_id
-    
+        if not user_id:
+            return make_response(
+                {"message": "User not found"}, 400
+            )
+        
+        for image_url in imageUrls:
+            new_label = WineLabel(
+                image_url = image_url,
+                style = style,
+                user_id = user_id)
+            db.session.add(new_label)
+
+        db.session.commit()
+        return make_response({
+            "message": "Labels created successfully"
+        }, 201)
+     
         
     
 api.add_resource(Labels, '/labels')
@@ -180,10 +212,14 @@ api.add_resource(LabelsByStyle, '/labels')
 #LABELSBYUSER
 class LabelsByUser(Resource):
     def get(self, user):
-        label = WineLabel.query.filter_by(user=user).first()
-        return label.to_dict(), 200
+        labels = WineLabel.query.filter_by(user_id=user).order_by(WineLabel.created_at.desc()).limit(4).all()
+        label_dict = [label.to_dict() for label in labels]
+        return make_response(
+            {'labels': label_dict}, 
+            200
+        )
     
-api.add_resource(LabelsByUser, '/')
+api.add_resource(LabelsByUser, '/labels/user/<int:user>')
 
 #LABELSBYID
 class LabelsById(Resource):

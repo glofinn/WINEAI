@@ -7,6 +7,8 @@ from config import bcrypt, db, app
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
+    serialize_rules = ('-wines', '-labels')
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     name = db.Column(db.String,)
@@ -58,6 +60,7 @@ class WineLabel(db.Model, SerializerMixin):
     image_url = db.Column(db.String)
     style = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     user = db.relationship("User", back_populates="labels")
 
@@ -73,6 +76,7 @@ class Wine(db.Model, SerializerMixin):
     region = db.Column(db.String)
     country = db.Column(db.String)
     story = db.Column(db.String)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
     label_id = db.Column(db.Integer, db.ForeignKey('winelabels.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 

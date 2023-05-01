@@ -1,6 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import wineBottle from "../WINESRCS/winebottlesmaller.svg";
 import axios from "axios";
+
+const fetchRecentLabels = async (userId) => {
+  try {
+    const response = await axios.get(`/labels/user/${userId}`);
+    return response.data.labels;
+  } catch (error) {
+    console.error("Error fetching recent labels:", error);
+    return [];
+  }
+};
 
 function LabelMaker({ user }) {
   const [formData, setFormData] = useState({
@@ -10,6 +20,21 @@ function LabelMaker({ user }) {
   });
 
   const [generatedImages, setGeneratedImages] = useState([]);
+  const [generatedImageIds, setGeneratedImageIds] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      const getRecentLabels = async () => {
+        const recentLabels = await fetchRecentLabels(user.id);
+        setGeneratedImages(
+          recentLabels.map((label) => ({ url: label.image_url }))
+        );
+        setGeneratedImageIds(recentLabels.map((label) => label.id));
+      };
+      getRecentLabels();
+    }
+  }, [user]);
 
   const generateImages = async (style) => {
     console.log("API Key:", process.env.REACT_APP_OPENAI_API_KEY);
@@ -32,26 +57,64 @@ function LabelMaker({ user }) {
     return response.data.data;
   };
 
+  const handleSubmitWine = async (e) => {
+    e.preventDefault();
+    const wineData = {
+      name: formData.name,
+      type: formData.type,
+      grapes: formData.grapes,
+      region: formData.region,
+      country: formData.country,
+      label_id: formData.label_id || null,
+      user_id: user.id,
+    };
+    try {
+      const response = await axios.post("/wines", wineData);
+
+      if (response.status === 201) {
+        console.log("New wine created:", response.data);
+      } else {
+        console.error("Error creating new wine:", response.data);
+      }
+    } catch (error) {
+      console.error("Error creating new wine:", error.response.data);
+    }
+  };
+
   const handleSubmitLabel = async (e) => {
     e.preventDefault();
     try {
       const imageUrls = await generateImages(formData.labelPrompt);
-      saveImageUrls(imageUrls.map((image) => image.url));
+      const imageIds = await saveImageUrls(
+        imageUrls.map((image) => image.image.url)
+      );
+      setGeneratedImages((prevState) => [...prevState, ...imageUrls]);
+      setGeneratedImageIds((prevState) => [...prevState, ...imageIds]);
     } catch (error) {
       console.error("Error generating images:", error.response.data);
     }
   };
 
+  //LABELCLICK
+  const handleLabelClick = (id, url) => {
+    console.log("hi");
+    setSelectedImage(url);
+    setFormData((prevState) => ({ ...prevState, label_id: id }));
+  };
+
   const saveImageUrls = async (imageUrls) => {
     try {
-      const response = await axios.post("labels", {
+      const response = await axios.post("/labels", {
         imageUrls: imageUrls,
         style: formData.labelPrompt,
         user_id: user.id,
       });
       console.log(response.data.message);
+      return response.data.imageIds;
     } catch (error) {
       console.error("Error saving image URLs:", error);
+      setGeneratedImageIds([]);
+      return [];
     }
   };
 
@@ -65,18 +128,35 @@ function LabelMaker({ user }) {
       <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
         <div className="relative w-1/4 h-5/6">
           <div className="absolute top-0 left-0 w-full h-full bg-gray-400 opacity-50 z-0"></div>
-          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-10">
+          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-10 flex-col space-y-4">
             {generatedImages.map((image, index) => (
               <img
                 key={index}
                 src={image.url}
                 alt={`Generated Label ${index + 1}`}
-                className="w-full mb-4 object-contain"
+                className={`w-full object-contain ${
+                  image.url === selectedImage ? "border-4 border-blue-500" : ""
+                }`}
+                onClick={() =>
+                  handleLabelClick(generatedImageIds[index], image.url)
+                }
               />
             ))}
           </div>
         </div>
-        <div className="w-full h-5/6 flex justify-center items-center z-0">
+        <div className="w-full h-5/6 flex justify-center items-center z-0 relative">
+          {selectedImage && (
+            <div className="absolute w-auto transform translate-x-[-25vh] translate-y-[23vh]">
+              <img
+                src={selectedImage}
+                alt="Selected Label"
+                className="w-auto h-full object-contain transform scale-54 max-w-[90vh] max-h-full"
+                style={{
+                  clipPath: "polygon(5% 0, 90% 0, 90% 100%, 10% 100%)",
+                }}
+              />
+            </div>
+          )}
           <img
             src={wineBottle}
             alt="Wine Bottle"
@@ -124,7 +204,10 @@ function LabelMaker({ user }) {
                 </button>
               </div>
             </form>
-            <form className="w-full h-full bg-custom-gray border-8 border-custom-black p-6 text-black">
+            <form
+              className="w-full h-full bg-custom-gray border-8 border-custom-black p-6 text-black"
+              onSubmit={handleSubmitWine}
+            >
               <h2 className="text-2xl font-bold text-center text-black mb-8">
                 Create Your Wine
               </h2>
@@ -145,22 +228,24 @@ function LabelMaker({ user }) {
                   onChange={handleChange}
                 />
               </div>
+
               <div className="mb-4">
                 <label
                   className="block text-black text-sm font-bold mb-2"
-                  htmlFor="style"
+                  htmlFor="type"
                 >
-                  Style
+                  Type
                 </label>
                 <input
                   className="shadow appearance-none rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-rectangle-gray"
-                  id="style"
+                  id="type"
                   type="text"
-                  name="style"
-                  value={formData.style}
+                  name="type"
+                  value={formData.type}
                   onChange={handleChange}
                 />
               </div>
+
               <div className="mb-4">
                 <label
                   className="block text-black text-sm font-bold mb-2"
@@ -177,22 +262,41 @@ function LabelMaker({ user }) {
                   onChange={handleChange}
                 />
               </div>
+
               <div className="mb-4">
                 <label
                   className="block text-black text-sm font-bold mb-2"
-                  htmlFor="year"
+                  htmlFor="region"
                 >
-                  Year
+                  Region
                 </label>
                 <input
                   className="shadow appearance-none rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-rectangle-gray"
-                  id="year"
+                  id="region"
                   type="text"
-                  name="year"
-                  value={formData.year}
+                  name="region"
+                  value={formData.region}
                   onChange={handleChange}
                 />
               </div>
+
+              <div className="mb-4">
+                <label
+                  className="block text-black text-sm font-bold mb-2"
+                  htmlFor="country"
+                >
+                  Country
+                </label>
+                <input
+                  className="shadow appearance-none rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-rectangle-gray"
+                  id="country"
+                  type="text"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                />
+              </div>
+
               <div className="flex items-center justify-center">
                 <button
                   className="bg-rectangle-gray hover:scale-105 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
