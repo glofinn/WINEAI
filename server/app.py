@@ -159,12 +159,12 @@ class Labels(Resource):
         )
     def post(self):
         data = request.get_json()
-        label= WineLabel(**data)
-        db.session.add(label)
-        db.session.commit()
-        return make_response(
-            {"message": "Label created successfully"}, 201
-        )
+        imageUrls = data.get('imageUrls',[])
+        style = data.get('style', '')
+        user_id = data.get('user_id', None)
+
+        if not user_id
+    
         
     
 api.add_resource(Labels, '/labels')
