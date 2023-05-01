@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./components/Home.js";
+import Login from "./components/Login.js";
+import Signup from "./components/Signup";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -17,7 +19,14 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Home />
+        <Routes>
+          <Route path="/" element={<Home user={user} setUser={setUser} />} />
+          <Route
+            path="/login"
+            element={<Login user={user} setUser={setUser} />}
+          />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
       </BrowserRouter>
     </div>
   );

@@ -1,6 +1,6 @@
 from flask import request, make_response, jsonify, session;
 from flask_restful import Resource, Api
-from models import db, User, WineLabel, Wine, Stories
+from models import db, User, WineLabel, Wine
 from config import app, bcrypt
 
 api = Api(app)
@@ -23,7 +23,7 @@ class Signup(Resource):
         new_user = User(
                 username = data['username'],
                 name = data['name'],
-                password_hash = data['_password_hash']
+                _password_hash = bcrypt.generate_password_hash(data['_password_hash']).decode('utf-8')
             )
     
         db.session.add(new_user)
@@ -31,7 +31,7 @@ class Signup(Resource):
 
         return make_response(new_user.to_dict(), 200)
     
-api.add_resource(Signup, '')
+api.add_resource(Signup, '/signup')
 
 class Login(Resource):
     def post(self):
@@ -40,18 +40,18 @@ class Login(Resource):
         username = data['username']
         user = User.query.filter(User.username == username).first()
 
-        password = data['password']
+        password = data['_password_hash']
 
         if not user:
             return {'error': 'Invalid username or password'}, 401
 
         if user.authenticate(password):
             session['user_id'] = user.id
-            print(session.get['user_id'], " is the session data")
+            print(session.get('user_id'), " is the session data")
             return user.to_dict(), 200
         
 
-api.add_resource(Login, '')
+api.add_resource(Login, '/login')
 
 class CheckSession(Resource):
     def get(self):
@@ -62,7 +62,7 @@ class CheckSession(Resource):
         else:
             return {'message': '401: Not Authorized'}, 401
         
-api.add_resource(CheckSession, '')
+api.add_resource(CheckSession, '/check_session')
 
 
 class Logout(Resource):
@@ -70,7 +70,7 @@ class Logout(Resource):
         session['user_id'] = None
         return {'message': "204, No Content"}, 204
     
-api.add_resource(Logout, '')
+api.add_resource(Logout, '/logout')
 
 
 
@@ -93,7 +93,7 @@ class WinesByType(Resource):
         wine = Wine.query.filter_by(type = type).all()
         return wine.to_dict(), 200
     
-api.add_resource(WinesByType, '')
+api.add_resource(WinesByType, '/')
 
 
 #WINESBYGRAPE
@@ -102,7 +102,7 @@ class WinesByGrape(Resource):
         wine = Wine.query.filter_by(grape = grape).all()
         return wine.to_dict(), 200
     
-api.add_resource(WinesByGrape, '')
+api.add_resource(WinesByGrape, '/')
 
 
 #WINESBYREGION
@@ -111,7 +111,7 @@ class WinesByRegion(Resource):
         wine = Wine.query.filter_by(region=region).all()
         return wine.to_dict(), 200
     
-api.add_resource(WinesByRegion, '')
+api.add_resource(WinesByRegion, '/')
 
 #WINESBYCOUNTRY
 class WinesByCountry(Resource):
@@ -119,7 +119,7 @@ class WinesByCountry(Resource):
         wine = Wine.query.filter_by(country=country).first()
         return wine.to_dict(), 200
     
-api.add_resource(WinesByCountry, '')
+api.add_resource(WinesByCountry, '/')
 
 #WINESBYID
 class WinesById(Resource):
@@ -146,7 +146,7 @@ class WinesById(Resource):
         db.session.delete(wine)
         db.session.commit()
 
-api.add_resource(WinesById, '')
+api.add_resource(WinesById, '/')
 
 #LABELS
 class Labels(Resource):
@@ -157,8 +157,17 @@ class Labels(Resource):
             label_dict,
             200
         )
+    def post(self):
+        data = request.get_json()
+        imageUrls = data.get('imageUrls',[])
+        style = data.get('style', '')
+        user_id = data.get('user_id', None)
+
+        if not user_id
     
-api.add_resource(Labels, '')
+        
+    
+api.add_resource(Labels, '/labels')
 
 #LABELSBYSTYLE
 class LabelsByStyle(Resource):
@@ -166,7 +175,7 @@ class LabelsByStyle(Resource):
         label = WineLabel.query.filter_by(style=style).first()
         return label.to_dict(), 200
 
-api.add_resource(LabelsByStyle, '')
+api.add_resource(LabelsByStyle, '/labels')
 
 #LABELSBYUSER
 class LabelsByUser(Resource):
@@ -174,7 +183,7 @@ class LabelsByUser(Resource):
         label = WineLabel.query.filter_by(user=user).first()
         return label.to_dict(), 200
     
-api.add_resource(LabelsByUser, '')
+api.add_resource(LabelsByUser, '/')
 
 #LABELSBYID
 class LabelsById(Resource):
@@ -182,9 +191,11 @@ class LabelsById(Resource):
         label = WineLabel.query.filter_by(id=id).first()
         return label.to_dict(), 200
     
-api.add_resource(LabelsById, '')
+api.add_resource(LabelsById, '/')
 
 
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)
 
     
 

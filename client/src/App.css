@@ -1,0 +1,40 @@
+.Navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+.wineai-heading {
+  margin-top: 6rem;
+}
+
+.Navbar {
+  background-color: #f2f2f2;
+}
+
+.Navbar button {
+  transition: all 0.2s ease-in-out;
+}
+
+.Navbar button:hover {
+  background-color: #555555;
+}
+
+.Navbar button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+.Navbar button:active {
+  transform: translateY(1px);
+}
+
+.logo-container:hover img {
+  transform: scale(1.15);
+}
+
+.logo-container:hover h1 {
+  transform: scale(1.2);
+}
