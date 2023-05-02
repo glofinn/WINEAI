@@ -74,12 +74,18 @@ api.add_resource(Logout, '/logout')
 
 
 
-# WINES 
+# WINES BY USER
 
 class Wines(Resource):
     def get(self):
-        wines = Wine.query.all()
-        wine_dict = [wine.to_dict() for wine in wines]
+        user_id = request.args.get("user_id", type=int)
+        if user_id:
+            wines = Wine.query.filter_by(user_id=user_id).all()
+        else:
+
+            wines = Wine.query.all()
+        wine_dict = [wint.to_dict() for wint in wines]
+
         return make_response(
             wine_dict,
             200
@@ -101,7 +107,7 @@ class Wines(Resource):
         return {'message': 'New wine created', 'wine': new_wine.to_dict()}, 201
         
 
-api.add_resource(Wines, '/wines')
+api.add_resource(Wines, '/winecellar')
 
 
 #WINESBYTYPE

@@ -38,3 +38,21 @@
 .logo-container:hover h1 {
   transform: scale(1.2);
 }
+
+.oval-button {
+  position: absolute;
+  padding: 10px 20px;
+  border-radius: 50px;
+  background-color: #4caf50;
+  color: rgb(167, 19, 19);
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 1s ease;
+  z-index: 1000;
+}
+
+.oval-button.show {
+  opacity: 1;
+}

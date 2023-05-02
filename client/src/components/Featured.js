@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../Featured.css";
 
 function Featured() {
   const [activeIndex, setActiveIndex] = useState(0);
+
   const designTypes = [
     {
       id: 1,

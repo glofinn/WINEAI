@@ -4,9 +4,11 @@ import "./App.css";
 import Home from "./components/Home.js";
 import Login from "./components/Login.js";
 import Signup from "./components/Signup";
+import { WineCellar } from "./components/Winecellar";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [selectedWine, setSelectedWine] = useState(null);
 
   useEffect(() => {
     fetch("/check_session", {}).then((response) => {
@@ -26,6 +28,10 @@ function App() {
             element={<Login user={user} setUser={setUser} />}
           />
           <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/winecellar"
+            element={user ? <WineCellar user={user} /> : <div>Loading...</div>}
+          />
         </Routes>
       </BrowserRouter>
     </div>

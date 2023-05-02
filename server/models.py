@@ -76,6 +76,7 @@ class Wine(db.Model, SerializerMixin):
     region = db.Column(db.String)
     country = db.Column(db.String)
     story = db.Column(db.String)
+    bottle = db.Column(db.String)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     label_id = db.Column(db.Integer, db.ForeignKey('winelabels.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
