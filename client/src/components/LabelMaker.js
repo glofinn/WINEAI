@@ -131,6 +131,38 @@ function LabelMaker({ user }) {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  //WITH PROXY
+  // const handleSave = async () => {
+  //   if (!selectedImage) return;
+
+  //   try {
+  //     // Save the selected image URL to the proxy server
+  //     const response = await axios.post("/proxy/save-image", {
+  //       image_url: selectedImage,
+  //       user_id: user.id,
+  //     });
+
+  //     if (response.status === 200) {
+  //       console.log("Image URL saved to the proxy server:", response);
+  //       setSelectedImage(null);
+  //       setFormData({
+  //         generatedimg: "",
+  //         style: "",
+  //         labelPrompt: "",
+  //       });
+  //     } else {
+  //       console.error("Error saving image URL to the proxy server:", response);
+  //     }
+  //   } catch (error) {
+  //     console.error(
+  //       "Error saving image URL to the proxy server:",
+  //       error.response
+  //     );
+  //   }
+  // };
+
+  //WITHOUT PROXY
+
   const handleSave = async () => {
     if (!selectedImage) return;
 
@@ -160,31 +192,33 @@ function LabelMaker({ user }) {
     }
   };
 
-  // const downloadImage = async (url, filename) => {
-  //   const response = await fetch(url);
-  //   const blob = await response.blob();
-  //   const a = document.createElement("a");
-  //   a.href = URL.createObjectURL(blob);
-  //   a.download = filename;
-  //   a.click();
-  //   a.remove();
-  // };
-
+  //WITHOUT PROXY
   const downloadImage = async (url, filename) => {
-    try {
-      const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
-        },
-        mode: "cors",
-      });
-      const blob = await response.blob();
-      fileDownload(blob, filename);
-    } catch (error) {
-      console.error("Error downloading image:", error);
-    }
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    a.remove();
   };
+
+  //WITH PROXY
+  // const downloadImage = async (url, filename) => {
+  //   try {
+  //     const response = await fetch(url, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
+  //       },
+  //       mode: "cors",
+  //     });
+  //     const blob = await response.blob();
+  //     fileDownload(blob, filename);
+  //   } catch (error) {
+  //     console.error("Error downloading image:", error);
+  //   }
+  // };
 
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center">
