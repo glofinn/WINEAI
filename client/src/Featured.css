@@ -89,5 +89,15 @@ img {
 }
 
 .right-images-container {
-  margin-left: 8rem;
+  margin-left: 4rem;
+  z-index: 10;
+}
+
+.right-images {
+  margin-left: 32rem;
+}
+
+.left-images-container {
+  margin-left: 12rem;
+  z-index: 10;
 }

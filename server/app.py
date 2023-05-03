@@ -215,24 +215,24 @@ class Labels(Resource):
     
 api.add_resource(Labels, '/labels')
 
-class SaveImage(Resource):
-    def post(self):
-        # Get the image URL and user ID from the request
-        image_url = request.json['image_url']
-        user_id = request.json['user_id']
+# class SaveImage(Resource):
+#     def post(self):
+#         # Get the image URL and user ID from the request
+#         image_url = request.json['image_url']
+#         user_id = request.json['user_id']
 
-        # Download the image
-        response = requests.get(image_url)
-        image_data = response.content
+#         # Download the image
+#         response = requests.get(image_url)
+#         image_data = response.content
 
-        # Save the image to your database
-        # You'll need to implement this part yourself, as it depends on your specific database setup
-        saved_image_id = save_image_to_database(image_data, user_id)
+#         # Save the image to your database
+#         # You'll need to implement this part yourself, as it depends on your specific database setup
+#         saved_image_id = save_image_to_database(image_data, user_id)
 
-        return jsonify({'message': 'Image saved successfully', 'image_id': saved_image_id})
+#         return jsonify({'message': 'Image saved successfully', 'image_id': saved_image_id})
 
-# Define the endpoint for saving the image
-api.add_resource(SaveImage, '/proxy/save-image')
+# # Define the endpoint for saving the image
+# api.add_resource(SaveImage, '/proxy/save-image')
 
 #LABELSBYSTYLE
 class LabelsByStyle(Resource):

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import wineBottle from "../WINESRCS/winebottlesmaller.svg";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import fileDownload from "js-file-download";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const fetchRecentLabels = async (userId) => {
   try {
@@ -41,6 +42,7 @@ function LabelMaker({ user }) {
   }, [user]);
 
   const generateImages = async (style) => {
+    NProgress.start();
     console.log("API Key:", process.env.REACT_APP_OPENAI_API_KEY);
 
     const response = await axios.post(
@@ -58,6 +60,7 @@ function LabelMaker({ user }) {
       }
     );
     setGeneratedImages(response.data.data);
+    NProgress.done();
     return response.data.data;
   };
 
@@ -223,7 +226,11 @@ function LabelMaker({ user }) {
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center">
       {selectedImage && (
-        <button className="oval-button2" onClick={handleSave}>
+        <button
+          className="oval-button2"
+          onClick={handleSave}
+          style={{ zIndex: 20 }}
+        >
           Save Label
         </button>
       )}
@@ -232,14 +239,15 @@ function LabelMaker({ user }) {
         onClick={() => {
           navigate("/winecellar");
         }}
+        style={{ zIndex: 20 }}
       >
-        Go To WineCellar
+        To The Cellar
       </button>
 
       <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
-        <div className="relative w-1/4 h-5/6">
-          <div className="absolute top-0 left-0 w-full h-full bg-gray-400 opacity-50 z-0"></div>
-          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-10 flex-col space-y-4">
+        <div className="relative w-1/3 h-5/6 -ml-16">
+          <div className="relative top-0 left-0 w-full h-full bg-gray-400 opacity-50 z-0"></div>
+          <div className="relative top-0 left-0 w-full h-full flex justify-center items-center z-10 flex-col space-y-4 -ml-8">
             {generatedImages.map((image, index) => (
               <img
                 key={index}
@@ -257,13 +265,13 @@ function LabelMaker({ user }) {
         </div>
         <div className="w-full h-5/6 flex justify-center items-center z-0 relative">
           {selectedImage && (
-            <div className="absolute w-auto transform translate-x-[-25vh] translate-y-[23vh]">
+            <div className="absolute w-auto transform translate-x-[-23vh] translate-y-[22vh]">
               <img
                 src={selectedImage}
                 alt="Selected Label"
                 className="w-auto h-full object-contain transform scale-54 max-w-[90vh] max-h-full"
                 style={{
-                  clipPath: "polygon(5% 0, 90% 0, 90% 100%, 10% 100%)",
+                  clipPath: "polygon(11% 0, 87% 0, 86% 90%, 11% 100%)",
                 }}
               />
             </div>
@@ -274,8 +282,8 @@ function LabelMaker({ user }) {
             className="h-full object-contain z-10"
           />
         </div>
-        <div className="w-2/4 h-5/6 px-8 py-8 z-0 float-right">
-          <div className="w-full max-w-md mx-auto">
+        <div className="transform translate-x-20 w-3/5 h-5/6 px-8 py-8 z-0 float-right mr-8">
+          <div className="w-full max-w-xl ml-auto mx-auto">
             <form
               className="w-full h-full bg-custom-gray border-8 border-custom-black p-6 text-black mb-8"
               onSubmit={handleSubmitLabel}
@@ -437,11 +445,11 @@ function LabelMaker({ user }) {
         </div>
         <div
           className="fixed top-0 left-0 w-1/4 h-full bg-rectangle-gray opacity-50 z-0"
-          style={{ zIndex: "-1" }}
+          style={{ zIndex: "-20" }}
         ></div>
         <div
           className="fixed top-0 right-0 w-1/4 h-full bg-rectangle-gray opacity-50 z-0"
-          style={{ zIndex: "-1" }}
+          style={{ zIndex: "-20" }}
         ></div>
       </div>
     </div>
