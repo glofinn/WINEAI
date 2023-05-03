@@ -8,7 +8,6 @@ import { WineCellar } from "./components/Winecellar";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [selectedWine, setSelectedWine] = useState(null);
 
   useEffect(() => {
     fetch("/check_session", {}).then((response) => {

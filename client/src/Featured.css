@@ -33,7 +33,7 @@
 .circle {
   stroke: #722f37;
   stroke-width: 2.8;
-  animation: progress 8s linear infinite;
+  animation: progress 5s linear infinite;
   stroke-linecap: round;
 }
 
@@ -55,4 +55,39 @@ img {
 .wineai-heading {
   margin-top: 0;
   margin-bottom: 0;
+}
+
+.placeholders {
+  z-index: 999;
+}
+
+.imgstroke-1 {
+  object-fit: cover;
+  border: 5px solid #a8a7a7;
+}
+
+.imgstroke-2 {
+  object-fit: cover;
+  border: 5px solid #7392ad;
+}
+
+.imgstroke-3 {
+  object-fit: cover;
+  border: 5px solid #a3687d;
+}
+
+.featured-container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.featured-main-contaner {
+  width: 100%;
+  min-height: 100vh;
+  /* display: flex; */
+  /* justify-content: center; */
+}
+
+.right-images-container {
+  margin-left: 8rem;
 }

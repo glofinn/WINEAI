@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import wineBottle from "../WINESRCS/winebottlesmaller.svg";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const fetchRecentLabels = async (userId) => {
   try {
@@ -23,6 +24,8 @@ function LabelMaker({ user }) {
   const [generatedImageIds, setGeneratedImageIds] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (user) {
       const getRecentLabels = async () => {
@@ -43,7 +46,7 @@ function LabelMaker({ user }) {
       "https://api.openai.com/v1/images/generations",
       {
         prompt: `A detailed lithograph by Aurelien Lefort showcasing an ${style} style natural wine label with esoteric and mystic imagery.`,
-        n: 1,
+        n: 4,
         size: "1024x1024",
       },
       {
@@ -69,7 +72,7 @@ function LabelMaker({ user }) {
       user_id: user.id,
     };
     try {
-      const response = await axios.post("/wines", wineData);
+      const response = await axios.post("/winecellar", wineData);
 
       if (response.status === 201) {
         console.log("New wine created:", response.data);
@@ -125,6 +128,15 @@ function LabelMaker({ user }) {
 
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center">
+      <button
+        className="oval-button"
+        onClick={() => {
+          navigate("/winecellar");
+        }}
+      >
+        Go To WineCellar
+      </button>
+
       <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
         <div className="relative w-1/4 h-5/6">
           <div className="absolute top-0 left-0 w-full h-full bg-gray-400 opacity-50 z-0"></div>

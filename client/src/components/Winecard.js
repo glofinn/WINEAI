@@ -17,10 +17,12 @@ export const Winecard = ({ wine, onSelect }) => {
           className="winecard__image"
         />
         <div className="winecard__content">
-          <h3 className="winecard__name">{wine.name}</h3>
-          <p className="winecard__type">Type: {wine.type}</p>
-          <p className="winecard__grapes">Grapes: {wine.grapes}</p>
-          <p className="winecard__region">
+          <h3 className="winecard__nam font-bold text-xl">{wine.name}</h3>
+          <p className="winecard__type font-semibold ">Type: {wine.type}</p>
+          <p className="winecard__grapes font-semibold">
+            Grapes: {wine.grapes}
+          </p>
+          <p className="winecard__region font-semibold">
             {wine.region}, {wine.country}
           </p>
           <button className="winecard__flip-btn" onClick={handleClick}>
@@ -29,7 +31,7 @@ export const Winecard = ({ wine, onSelect }) => {
         </div>
       </div>
       <div className="winecard__back">
-        <p className="winecard__story">{wine.story}</p>
+        <p className="winecard__story font-semibold">{wine.story}</p>
         <button className="winecard__flip-btn" onClick={handleClick}>
           Go Back
         </button>

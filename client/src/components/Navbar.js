@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../WINESRCS/titlelogo.svg";
+import logo from "../WINESRCS/titlelogo2.svg";
 import "../App.css";
 
 function Navbar({ user, setUser }) {
@@ -38,12 +38,11 @@ function Navbar({ user, setUser }) {
   return (
     <div className="Navbar fixed top-0 left-0 w-full bg-white shadow-md z-10">
       <div className="flex justify-between items-center h-16 mx-8">
-        <div
-          className="flex items-center logo-container"
-          onClick={handleHomeClick}
-        >
-          <img src={logo} alt="Logo" className="h-8 w-auto mr-2" />
-          <h1 className="text-lg font-semi-bold text-text-black">WineAI</h1>
+        <div className="relative logo-container" onClick={handleHomeClick}>
+          <img src={logo} alt="Logo" className="h-8 w-auto" />
+          <h1 className="text-lg font-semi-bold text-text-black absolute left-3 top-0.5">
+            WineAI
+          </h1>
         </div>
         <div>
           {user == null && (
