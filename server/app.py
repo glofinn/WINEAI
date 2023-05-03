@@ -191,18 +191,24 @@ class Labels(Resource):
                 {"message": "User not found"}, 400
             )
         
+        created_label_ids = []
         for image_url in imageUrls:
             new_label = WineLabel(
                 image_url = image_url,
                 style = style,
                 user_id = user_id)
             db.session.add(new_label)
-
+            db.session.flush()
+            created_label_ids.append(new_label.id)
+        
         db.session.commit()
         return make_response({
-            "message": "Labels created successfully"
+            "message": "Labels created successfully",
+            "imageIds": created_label_ids
         }, 201)
-     
+
+            
+            
         
     
 api.add_resource(Labels, '/labels')

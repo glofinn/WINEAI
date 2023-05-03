@@ -54,6 +54,21 @@
   z-index: 1000;
 }
 
+.oval-button2 {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  background-color: #b3b3b3;
+  color: #1e1e1e;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: opacity 1s ease;
+  z-index: 1000;
+}
+
 .oval-button.show {
   opacity: 1;
 }

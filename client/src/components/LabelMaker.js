@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import wineBottle from "../WINESRCS/winebottlesmaller.svg";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import fileDownload from "js-file-download";
 
 const fetchRecentLabels = async (userId) => {
   try {
@@ -68,6 +69,7 @@ function LabelMaker({ user }) {
       grapes: formData.grapes,
       region: formData.region,
       country: formData.country,
+      vintage: formData.vintage,
       label_id: formData.label_id || null,
       user_id: user.id,
     };
@@ -91,16 +93,20 @@ function LabelMaker({ user }) {
       const imageIds = await saveImageUrls(
         imageUrls.map((image) => image.image.url)
       );
-      setGeneratedImages((prevState) => [...prevState, ...imageUrls]);
-      setGeneratedImageIds((prevState) => [...prevState, ...imageIds]);
+      setGeneratedImages([...generateImages, ...imageUrls]);
+      setGeneratedImageIds([...generatedImageIds, ...imageIds]);
+
+      if (imageIds.length > 0) {
+        setFormData((prevState) => ({ ...prevState, label_id: imageIds[0] }));
+      }
     } catch (error) {
-      console.error("Error generating images:", error.response.data);
+      console.error("Error generating images:", error.response);
     }
   };
 
   //LABELCLICK
   const handleLabelClick = (id, url) => {
-    console.log("hi");
+    console.log(selectedImage);
     setSelectedImage(url);
     setFormData((prevState) => ({ ...prevState, label_id: id }));
   };
@@ -116,7 +122,6 @@ function LabelMaker({ user }) {
       return response.data.imageIds;
     } catch (error) {
       console.error("Error saving image URLs:", error);
-      setGeneratedImageIds([]);
       return [];
     }
   };
@@ -126,8 +131,68 @@ function LabelMaker({ user }) {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  const handleSave = async () => {
+    if (!selectedImage) return;
+
+    try {
+      const localFilename = `${Date.now()}.png`;
+      await downloadImage(selectedImage, localFilename);
+
+      const response = await axios.post("/labels", {
+        image_url: localFilename,
+        style: formData.labelPrompt,
+        user_id: user.id,
+      });
+
+      if (response.status === 201) {
+        console.log("New label created:", response);
+        setSelectedImage(null);
+        setFormData({
+          generatedimg: "",
+          style: "",
+          labelPrompt: "",
+        });
+      } else {
+        console.error("Error creating new label:", response);
+      }
+    } catch (error) {
+      console.error("Error creating new label:", error.response);
+    }
+  };
+
+  // const downloadImage = async (url, filename) => {
+  //   const response = await fetch(url);
+  //   const blob = await response.blob();
+  //   const a = document.createElement("a");
+  //   a.href = URL.createObjectURL(blob);
+  //   a.download = filename;
+  //   a.click();
+  //   a.remove();
+  // };
+
+  const downloadImage = async (url, filename) => {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
+        },
+        mode: "cors",
+      });
+      const blob = await response.blob();
+      fileDownload(blob, filename);
+    } catch (error) {
+      console.error("Error downloading image:", error);
+    }
+  };
+
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center">
+      {selectedImage && (
+        <button className="oval-button2" onClick={handleSave}>
+          Save Label
+        </button>
+      )}
       <button
         className="oval-button"
         onClick={() => {
@@ -305,6 +370,22 @@ function LabelMaker({ user }) {
                   type="text"
                   name="country"
                   value={formData.country}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-black text-sm font-bold mb-2"
+                  htmlFor="vintage"
+                >
+                  Vintage
+                </label>
+                <input
+                  className="shadow appearance-none rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-rectangle-gray"
+                  id="vintage"
+                  type="text"
+                  name="vintage"
+                  value={formData.vintage}
                   onChange={handleChange}
                 />
               </div>

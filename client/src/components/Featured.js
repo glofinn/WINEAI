@@ -63,7 +63,7 @@ function Featured() {
     return () => clearTimeout(timer);
   }, [activeIndex, designTypes.length]);
 
-  console.log("designtypes:", designTypes);
+  // console.log("designtypes:", designTypes);
   return (
     <div className="featured-main-container">
       <div className="featured-container flex-col flex items-center justify-center">
