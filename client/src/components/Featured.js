@@ -115,13 +115,13 @@ function Featured() {
           src={designTypes[activeIndex].images[1]}
           alt="Right 1"
           className="h-80 w-auto bg-color-2 imgstroke-2"
-          style={{ zIndex: 10 }}
+          // style={{ zIndex: 10 }}
         />
         <img
           src={designTypes[activeIndex].images[2]}
           alt="Right 2"
           className="h-80 w-auto ml-12 mt-5 imgstroke-3 "
-          style={{ zIndex: 10 }}
+          // style={{ zIndex: 10 }}
         />
       </div>
     </div>

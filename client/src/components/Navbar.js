@@ -40,14 +40,14 @@ function Navbar({ user, setUser }) {
       <div className="flex justify-between items-center h-16 mx-8">
         <div className="relative logo-container" onClick={handleHomeClick}>
           <img src={logo} alt="Logo" className="h-8 w-auto" />
-          <h1 className="text-lg font-semi-bold text-text-black absolute left-3 top-0.5">
+          <h1 className="text-lg font-semi-bold text-text-black absolute left-3 top-0.5 font-mono">
             WineAI
           </h1>
         </div>
         <div>
           {user == null && (
             <button
-              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4"
+              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4 font-mono"
               onClick={handleLoginClick}
             >
               Login
@@ -55,7 +55,7 @@ function Navbar({ user, setUser }) {
           )}
           {user && (
             <button
-              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4"
+              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4 font-mono"
               onClick={handleLogout}
             >
               Logout
@@ -63,7 +63,7 @@ function Navbar({ user, setUser }) {
           )}
           {user === null && (
             <button
-              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded"
+              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded font-mono"
               onClick={handleSignupClick}
             >
               Signup

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
+import AWS from "aws-sdk";
 
 const fetchRecentLabels = async (userId) => {
   try {
@@ -14,6 +15,12 @@ const fetchRecentLabels = async (userId) => {
     return [];
   }
 };
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+  region: process.env.REACT_APP_AWS_REGION,
+});
 
 function LabelMaker({ user }) {
   const [formData, setFormData] = useState({
@@ -41,15 +48,16 @@ function LabelMaker({ user }) {
     }
   }, [user]);
 
+  //REQUEST TO DALL-E
   const generateImages = async (style) => {
     NProgress.start();
-    console.log("API Key:", process.env.REACT_APP_OPENAI_API_KEY);
+    // console.log("API Key:", process.env.REACT_APP_OPENAI_API_KEY);
 
     const response = await axios.post(
       "https://api.openai.com/v1/images/generations",
       {
         prompt: `A detailed lithograph by Aurelien Lefort showcasing an ${style} style natural wine label with esoteric and mystic imagery.`,
-        n: 4,
+        n: 1,
         size: "1024x1024",
       },
       {
@@ -64,6 +72,7 @@ function LabelMaker({ user }) {
     return response.data.data;
   };
 
+  //WINE SUBMIT FORM
   const handleSubmitWine = async (e) => {
     e.preventDefault();
     const wineData = {
@@ -72,6 +81,7 @@ function LabelMaker({ user }) {
       grapes: formData.grapes,
       region: formData.region,
       country: formData.country,
+      bottle: selectedImage,
       vintage: formData.vintage,
       label_id: formData.label_id || null,
       user_id: user.id,
@@ -89,6 +99,7 @@ function LabelMaker({ user }) {
     }
   };
 
+  //LABLE SUBMIT
   const handleSubmitLabel = async (e) => {
     e.preventDefault();
     try {
@@ -114,6 +125,7 @@ function LabelMaker({ user }) {
     setFormData((prevState) => ({ ...prevState, label_id: id }));
   };
 
+  //SAVEURL
   const saveImageUrls = async (imageUrls) => {
     try {
       const response = await axios.post("/labels", {
@@ -167,20 +179,40 @@ function LabelMaker({ user }) {
   //WITHOUT PROXY
 
   const handleSave = async () => {
+    console.log("API Key:", process.env.REACT_APP_AWS_ACCESS_KEY_ID);
+    console.log("Secret:", process.env.REACT_APP_AWS_SECRET_ACCESS_KEY);
+    console.log("Region:", process.env.REACT_APP_AWS_REGION);
+    console.log("Bucket:", process.env.REACT_APP_AWS_S3_BUCKET);
+    const corsProxy = "https://cors-anywhere.herokuapp.com/";
     if (!selectedImage) return;
 
     try {
-      const localFilename = `${Date.now()}.png`;
-      await downloadImage(selectedImage, localFilename);
+      //convert image to blob
+      console.log(selectedImage);
+      const response = await fetch(corsProxy + selectedImage);
+      const blob = await response.blob();
 
-      const response = await axios.post("/labels", {
-        image_url: localFilename,
+      //upload blob to aws -> returns url
+      const params = {
+        Bucket: process.env.REACT_APP_AWS_S3_BUCKET,
+        Key: `${user.id}/${Date.now()}.png`,
+        Body: blob,
+        ContentType: "image/png",
+        ACL: "public-read",
+      };
+
+      const uploadResult = await s3.upload(params).promise();
+      // console.log(uploadResult);
+      const imageUrl = uploadResult.Location;
+
+      const responseLabels = await axios.post("/labels", {
+        image_url: imageUrl,
         style: formData.labelPrompt,
         user_id: user.id,
       });
 
-      if (response.status === 201) {
-        console.log("New label created:", response);
+      if (responseLabels.status === 201) {
+        console.log("New label created:", responseLabels);
         setSelectedImage(null);
         setFormData({
           generatedimg: "",
@@ -188,7 +220,7 @@ function LabelMaker({ user }) {
           labelPrompt: "",
         });
       } else {
-        console.error("Error creating new label:", response);
+        console.error("Error creating new label:", responseLabels);
       }
     } catch (error) {
       console.error("Error creating new label:", error.response);
@@ -196,15 +228,15 @@ function LabelMaker({ user }) {
   };
 
   //WITHOUT PROXY
-  const downloadImage = async (url, filename) => {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    a.click();
-    a.remove();
-  };
+  // const downloadImage = async (url, filename) => {
+  //   const response = await fetch(url);
+  //   const blob = await response.blob();
+  //   const a = document.createElement("a");
+  //   a.href = URL.createObjectURL(blob);
+  //   a.download = filename;
+  //   a.click();
+  //   a.remove();
+  // };
 
   //WITH PROXY
   // const downloadImage = async (url, filename) => {
@@ -227,7 +259,7 @@ function LabelMaker({ user }) {
     <div className="relative w-full min-h-screen flex items-center justify-center">
       {selectedImage && (
         <button
-          className="oval-button2"
+          className="oval-button2 font-mono"
           onClick={handleSave}
           style={{ zIndex: 20 }}
         >
@@ -235,11 +267,11 @@ function LabelMaker({ user }) {
         </button>
       )}
       <button
-        className="oval-button"
+        className="oval-button font-mono"
         onClick={() => {
           navigate("/winecellar");
         }}
-        style={{ zIndex: 20 }}
+        style={{ zIndex: 1000 }}
       >
         To The Cellar
       </button>
@@ -285,7 +317,7 @@ function LabelMaker({ user }) {
         <div className="transform translate-x-20 w-3/5 h-5/6 px-8 py-8 z-0 float-right mr-8">
           <div className="w-full max-w-xl ml-auto mx-auto">
             <form
-              className="w-full h-full bg-custom-gray border-8 border-custom-black p-6 text-black mb-8"
+              className="w-full h-full bg-custom-gray border-8 border-custom-black p-6 text-black mb-8 font-mono"
               onSubmit={handleSubmitLabel}
             >
               <h2 className="text-2xl font-bold text-center text-black mb-8">
@@ -324,7 +356,7 @@ function LabelMaker({ user }) {
               </div>
             </form>
             <form
-              className="w-full h-full bg-custom-gray border-8 border-custom-black p-6 text-black"
+              className="w-full h-full bg-custom-gray border-8 border-custom-black p-6 text-black font-mono"
               onSubmit={handleSubmitWine}
             >
               <h2 className="text-2xl font-bold text-center text-black mb-8">
@@ -425,7 +457,7 @@ function LabelMaker({ user }) {
                 <input
                   className="shadow appearance-none rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-rectangle-gray"
                   id="vintage"
-                  type="text"
+                  type="integer"
                   name="vintage"
                   value={formData.vintage}
                   onChange={handleChange}
