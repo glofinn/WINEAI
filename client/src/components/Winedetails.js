@@ -238,7 +238,7 @@ const WineDetails = ({ onClose, user, setUser }) => {
         <p className="wine-details__story font-mono">{wine.story}</p>
       </div>
       <button
-        className="oval-button font-mono"
+        className="oval-button font-mono hover:bg-red-100"
         onClick={() => {
           navigate("/winecellar");
         }}
@@ -255,7 +255,7 @@ const WineDetails = ({ onClose, user, setUser }) => {
         style={{ zIndex: "0" }}
       ></div>
       <button
-        className="oval-button-edit font-mono"
+        className="oval-button-edit font-mono hover:bg-red-100"
         onClick={() => setShowEditForm(true)}
         style={{ zIndex: 1000 }}
       >

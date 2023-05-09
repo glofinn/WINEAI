@@ -26,12 +26,12 @@
 }
 
 .circle-bg {
-  stroke: #eee;
+  stroke: grey;
   stroke-width: 3.8;
 }
 
 .circle {
-  stroke: thistle;
+  stroke: rgb(254 226 226);
   stroke-width: 2.5;
   animation: progress 5s linear infinite;
   stroke-linecap: round;
