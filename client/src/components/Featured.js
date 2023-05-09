@@ -70,58 +70,63 @@ function Featured() {
         <img
           src={designTypes[activeIndex].images[0]}
           alt="Left 1"
-          className="left-20 h-80 w-auto imgstroke-1"
-          style={{ zIndex: 10 }}
+          className={`left-20 h-80 w-auto imgstroke-1 fade-image scale-110`}
         />
       </div>
-      <div className="flex items-center justify-center">
-        {designTypes.map((designType, index) => (
-          <div
-            key={designType.id}
-            className="flex flex-col items-center mx-2 relative"
-          >
+
+      <div className="flex flex-col items-center">
+        <h2 className="font-mono font-medium text-center mb-4">
+          Browse Random Designs
+        </h2>
+        <div className="flex">
+          {designTypes.map((designType, index) => (
             <div
-              className={`cursor-pointer rounded-full h-10 w-10 border-4 border-solid ${
-                activeIndex === index
-                  ? "border-gray-700 bg-gray-700"
-                  : "border-transparent bg-gray-300"
-              }`}
-              onClick={() => setActiveIndex(index)}
-              style={{ zIndex: 1 }}
-            />
-            {activeIndex === index && (
-              <div className="circular-progress-wrapper inset-0">
-                <svg className="circular-progress" viewBox="0 0 36 36">
-                  <path
-                    className="circle-bg"
-                    d="M18 2.0845
-                      a 15.9155 15.9155 0 0 1 0 31.831
-                      a 15.9155 15.9155 0 0 1 0 -31.831"
-                  />
-                  <path
-                    className="circle"
-                    d="M18 2.0845
-                      a 15.9155 15.9155 0 0 1 0 31.831
-                      a 15.9155 15.9155 0 0 1 0 -31.831"
-                  />
-                </svg>
-              </div>
-            )}
-          </div>
-        ))}
+              key={designType.id}
+              className="flex flex-col items-center mx-2 relative"
+            >
+              <div
+                className={`cursor-pointer rounded-full h-10 w-10 border-4 border-solid ${
+                  activeIndex === index
+                    ? "border-gray-700 bg-rectangle-gray"
+                    : "border-transparent bg-gray-300"
+                }`}
+                onClick={() => setActiveIndex(index)}
+                style={{ zIndex: 1 }}
+              />
+
+              {activeIndex === index && (
+                <div className="circular-progress-wrapper inset-0">
+                  <svg className="circular-progress" viewBox="0 0 36 36">
+                    <path
+                      className="circle-bg"
+                      d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path
+                      className="circle"
+                      d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                  </svg>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="right-images-container">
+
+      <div className="right-images-container z-0 pt-10 pb-10">
         <img
           src={designTypes[activeIndex].images[1]}
           alt="Right 1"
-          className="h-80 w-auto bg-color-2 imgstroke-2"
-          // style={{ zIndex: 10 }}
+          className={`h-80 w-auto bg-color-2 mr-30 imgstroke-3 fade-image scale-110`}
         />
         <img
           src={designTypes[activeIndex].images[2]}
           alt="Right 2"
-          className="h-80 w-auto ml-12 mt-5 imgstroke-3 "
-          // style={{ zIndex: 10 }}
+          className={`h-80 w-auto ml-20 mt-6 imgstroke-3 fade-image scale-110`}
         />
       </div>
     </div>

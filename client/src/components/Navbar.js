@@ -29,7 +29,7 @@ function Navbar({ user, setUser }) {
       }
 
       setUser(null);
-      window.location.reload();
+      navigate("/");
     } catch (error) {
       console.error("Error logging out: ", error);
     }
@@ -47,7 +47,7 @@ function Navbar({ user, setUser }) {
         <div>
           {user == null && (
             <button
-              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4 font-mono"
+              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4 font-mono font-medium hover:bg-red-100"
               onClick={handleLoginClick}
             >
               Login
@@ -55,7 +55,7 @@ function Navbar({ user, setUser }) {
           )}
           {user && (
             <button
-              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4 font-mono"
+              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4 font-mono font-medium hover:bg-red-100"
               onClick={handleLogout}
             >
               Logout
@@ -63,7 +63,7 @@ function Navbar({ user, setUser }) {
           )}
           {user === null && (
             <button
-              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded font-mono"
+              className="bg-sky-800 font-semi-bold text-white py-2 px-4 rounded font-mono font-medium hover:bg-red-100"
               onClick={handleSignupClick}
             >
               Signup

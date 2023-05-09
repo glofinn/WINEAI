@@ -4,6 +4,7 @@ import "./App.css";
 import Home from "./components/Home.js";
 import Login from "./components/Login.js";
 import Signup from "./components/Signup";
+import Winedetails from "./components/Winedetails";
 import { WineCellar } from "./components/Winecellar";
 
 function App() {
@@ -29,7 +30,17 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route
             path="/winecellar"
-            element={user ? <WineCellar user={user} /> : <div>Loading...</div>}
+            element={
+              user ? (
+                <WineCellar user={user} setUser={setUser} />
+              ) : (
+                <div>Not Logged in. Please Login/Signup.</div>
+              )
+            }
+          />
+          <Route
+            path="winecellar/:id"
+            element={<Winedetails user={user} setUser={setUser} />}
           />
         </Routes>
       </BrowserRouter>

@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       scale: {
-        54: "0.54",
+        55: "0.55",
       },
       colors: {
         "custom-gray": "#757575",

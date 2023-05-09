@@ -1,7 +1,7 @@
 .winecard {
   position: relative;
   width: 300px;
-  height: 600px; /* increased height */
+  min-height: 560px; /* Changed height to min-height */
   perspective: 1000px;
   margin: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -9,7 +9,7 @@
 }
 
 .winecard:hover {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .winecard__front,
@@ -24,10 +24,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  background-color: zinc-200;
   border-radius: 8px;
   backface-visibility: hidden;
   transition: transform 0.6s;
+  gap: 20px;
 }
 
 .winecard__front {
@@ -39,12 +39,12 @@
   height: auto;
   object-fit: cover;
   border-radius: 8px;
-  margin-bottom: 16px;
+  margin-bottom: -10px;
 }
 
 .winecard__name {
   font-size: 24px;
-  margin-bottom: 8px;
+  margin-top: -10px;
 }
 
 .winecard__type,
@@ -62,9 +62,25 @@
   font-size: 14px;
   padding: 6px 12px;
   cursor: pointer;
+  margin-top: 10px;
+  margin-right: 20px;
+}
+
+.winecard__delete-btn {
+  background-color: #f9aa33;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  padding: 6px 12px;
+  cursor: pointer;
 }
 
 .winecard__flip-btn:hover {
+  background-color: #ffbe76;
+}
+
+.winecard__delete-btn:hover {
   background-color: #ffbe76;
 }
 
@@ -84,4 +100,32 @@
 
 .flipped .winecard__back {
   transform: rotateY(360deg);
+}
+
+.winecard__grapes {
+  /* font-weight: 500; */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.winecard__name,
+.winecard__type,
+.winecard__grapes,
+.winecard__region,
+.winecard__vintage,
+.winecard__story {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.winecard__vintage {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.winecard__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
 }

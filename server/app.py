@@ -1,14 +1,24 @@
-from flask import request, make_response, jsonify, session, send_file;
+from flask import request, make_response, jsonify, session, send_file, send_from_directory, Flask
 from flask_restful import Resource, Api
 from models import db, User, WineLabel, Wine
 from config import app, bcrypt
 import requests
 from io import BytesIO
 
+
 api = Api(app)
 
 def checkSession():
     print(session.get("user_id"),"is the user id session")
+
+
+class StaticResource(Resource):
+    def get(self, path):
+        return send_from_directory('static', path)
+    
+
+api.add_resource(StaticResource, '/static/<path:path>')
+
 
 
 class Signup(Resource):
@@ -100,6 +110,9 @@ class Wines(Resource):
             grapes = data['grapes'],
             region = data['region'],
             country = data['country'],
+            bottle = data['bottle'],
+            vintage = data['vintage'],
+            story = data['story'],
             label_id = data['label_id'],
             user_id = data['user_id'],
         )
@@ -118,7 +131,7 @@ class WinesByType(Resource):
         wine = Wine.query.filter_by(type = type).all()
         return wine.to_dict(), 200
     
-api.add_resource(WinesByType, '/')
+api.add_resource(WinesByType, '/winecellar/type')
 
 
 #WINESBYGRAPE
@@ -127,7 +140,7 @@ class WinesByGrape(Resource):
         wine = Wine.query.filter_by(grape = grape).all()
         return wine.to_dict(), 200
     
-api.add_resource(WinesByGrape, '/')
+api.add_resource(WinesByGrape, '/winecellar/grapes')
 
 
 #WINESBYREGION
@@ -136,7 +149,7 @@ class WinesByRegion(Resource):
         wine = Wine.query.filter_by(region=region).all()
         return wine.to_dict(), 200
     
-api.add_resource(WinesByRegion, '/')
+api.add_resource(WinesByRegion, '/winecellar/region')
 
 #WINESBYCOUNTRY
 class WinesByCountry(Resource):
@@ -144,7 +157,7 @@ class WinesByCountry(Resource):
         wine = Wine.query.filter_by(country=country).first()
         return wine.to_dict(), 200
     
-api.add_resource(WinesByCountry, '/')
+api.add_resource(WinesByCountry, '/winecellar/country')
 
 #WINESBYID
 class WinesById(Resource):
@@ -171,7 +184,7 @@ class WinesById(Resource):
         db.session.delete(wine)
         db.session.commit()
 
-api.add_resource(WinesById, '/')
+api.add_resource(WinesById, '/winecellar/<int:id>')
 
 #LABELS
 class Labels(Resource):

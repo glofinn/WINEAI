@@ -86,31 +86,19 @@ class Wine(db.Model, SerializerMixin):
 
     @validates('type', 'grapes', 'region', 'country')
     def validate_wine(self, key, wine):
-        if (key == 'type'):
+        if key == 'type':
             if not wine:
                 raise ValueError('Type cannot be blank')
-            elif wine not in ['Red', 'White','Orange', 'Petnat']:
+            elif wine.lower() not in ['red', 'white', 'orange', 'petnat']:
                 raise ValueError("Type must be either 'Red', 'White', 'Orange' or 'Petnat'")
-            return wine
-        if (key == 'grapes'):
+            return wine.lower().capitalize()
+        elif key in ['grapes', 'region', 'country']:
             if not wine:
-                raise ValueError('Grapes cannot be blank')
+                raise ValueError(f'{key.capitalize()} cannot be blank')
             elif not isinstance(wine, str):
-                raise ValueError('Grapes cant be a number')
-            return wine
-        if (key == 'region'):
-            if not wine:
-                raise ValueError('Region cannot be blank')
-            elif not isinstance(wine, str):
-                raise ValueError('Region cant be a number')
-            return wine
-        if (key == 'country'):
-            if not wine:
-                raise ValueError('Country cannot be blank')
-            elif not isinstance(wine, str):
-                raise ValueError('Country cant be a number')
-            return wine
-        
+                raise ValueError(f'{key.capitalize()} cant be a number')
+            return wine.lower().capitalize()
+            
         
             
         
