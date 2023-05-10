@@ -85,7 +85,7 @@
   width: 20vw;
   height: auto;
   /* scale: 50%; */
-  max-height: 1200px;
+  /* max-height: 1200px; */
   object-fit: cover;
   left: 50%;
   top: 50%;
@@ -93,11 +93,13 @@
 }
 
 .wine-bottle {
-  scale: 35%;
+  scale: 25%;
   position: absolute;
-  left: 16vw;
-  top: 3vh;
-  clip-path: polygon(10% 0, 92% 0, 92% 100%, 10% 100%);
+  left: 0vw;
+  top: -25vh;
+  clip-path: polygon(10% 0, 90% 0, 89% 100%, 11% 100%);
+  width: 100%;
+  height: auto;
 }
 
 .edit-button {
@@ -178,3 +180,8 @@
 .edit-form button[type="button"]:hover {
   background-color: #cbd5e0;
 }
+
+/* .wine-details__center {
+  width: 20vw;
+  position: relative;
+} */

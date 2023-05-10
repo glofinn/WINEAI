@@ -104,22 +104,27 @@ class Wines(Resource):
         )
     def post(self):
         data = request.get_json()
-        new_wine = Wine(
-            name = data['name'],
-            type = data['type'],
-            grapes = data['grapes'],
-            region = data['region'],
-            country = data['country'],
-            bottle = data['bottle'],
-            vintage = data['vintage'],
-            story = data['story'],
-            label_id = data['label_id'],
-            user_id = data['user_id'],
-        )
+        try:
+            new_wine = Wine(
+                name=data['name'],
+                type=data['type'],
+                grapes=data['grapes'],
+                region=data['region'],
+                country=data['country'],
+                bottle=data['bottle'],
+                vintage=data['vintage'],
+                story=data['story'],
+                label_id=data['label_id'],
+                user_id=data['user_id'],
+            )
 
-        db.session.add(new_wine)
-        db.session.commit()
-        return {'message': 'New wine created', 'wine': new_wine.to_dict()}, 201
+            db.session.add(new_wine)
+            db.session.commit()
+            return {'message': 'New wine created', 'wine': new_wine.to_dict()}, 201
+
+        except ValueError as e:
+            return {'message': str(e)}, 400
+
         
 
 api.add_resource(Wines, '/winecellar')

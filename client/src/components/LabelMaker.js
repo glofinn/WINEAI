@@ -2,11 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import wineBottle from "../WINESRCS/winebottlesmaller.svg";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import AWS from "aws-sdk";
-import "../responsive.css";
 import spinningbottle from "../WINESRCS/titlelogo2.svg";
+// import "../images.css";
+import "../App.css";
 
 const fetchRecentLabels = async (userId) => {
   try {
@@ -17,12 +16,6 @@ const fetchRecentLabels = async (userId) => {
     return [];
   }
 };
-
-const s3 = new AWS.S3({
-  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-  region: process.env.REACT_APP_AWS_REGION,
-});
 
 function LabelMaker({ user }) {
   const [formData, setFormData] = useState({
@@ -36,6 +29,7 @@ function LabelMaker({ user }) {
   const [generatedImageIds, setGeneratedImageIds] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -115,7 +109,6 @@ function LabelMaker({ user }) {
     );
     const story = response.data.choices[0].message.content;
     setIsLoading(false);
-    alert("Wine Created! Check your cellar.");
 
     return story;
   };
@@ -149,17 +142,24 @@ function LabelMaker({ user }) {
       label_id: formData.label_id || null,
       user_id: user.id,
     };
+
     try {
       console.log("Wine data before submission", wineData);
       const response = await axios.post("/winecellar", wineData);
 
       if (response.status === 201) {
         console.log("New wine created:", response.data);
-      } else {
+        alert("Wine Created! Check your cellar.");
+        setErrorMessage("");
+        navigate("/winecellar");
+      } else if (response.status === 400) {
+        // Validation error
+        setErrorMessage(response.data.message);
         console.error("Error creating new wine:", response.data);
       }
     } catch (error) {
       console.error("Error creating new wine:", error.response.data);
+      setErrorMessage("An error occurred while submitting the form.");
     }
   };
 
@@ -245,58 +245,58 @@ function LabelMaker({ user }) {
 
   //WITHOUT PROXY
 
-  const handleSave = async () => {
-    console.log("API Key:", process.env.REACT_APP_AWS_ACCESS_KEY_ID);
-    console.log("Secret:", process.env.REACT_APP_AWS_SECRET_ACCESS_KEY);
-    console.log("Region:", process.env.REACT_APP_AWS_REGION);
-    console.log("Bucket:", process.env.REACT_APP_AWS_S3_BUCKET);
-    const corsProxy = "https://cors-anywhere.herokuapp.com/";
-    if (!selectedImage) return;
+  // const handleSave = async () => {
+  //   console.log("API Key:", process.env.REACT_APP_AWS_ACCESS_KEY_ID);
+  //   console.log("Secret:", process.env.REACT_APP_AWS_SECRET_ACCESS_KEY);
+  //   console.log("Region:", process.env.REACT_APP_AWS_REGION);
+  //   console.log("Bucket:", process.env.REACT_APP_AWS_S3_BUCKET);
+  //   const corsProxy = "https://cors-anywhere.herokuapp.com/";
+  //   if (!selectedImage) return;
 
-    try {
-      // convert image to blob
-      console.log(selectedImage);
-      const response = await fetch(corsProxy + selectedImage);
-      console.log(response);
-      const blob = await response.blob();
-      const new_image = new File([blob], "test.png");
-      console.log(new_image);
+  //   try {
+  //     // convert image to blob
+  //     console.log(selectedImage);
+  //     const response = await fetch(corsProxy + selectedImage);
+  //     console.log(response);
+  //     const blob = await response.blob();
+  //     const new_image = new File([blob], "test.png");
+  //     console.log(new_image);
 
-      //upload blob to aws -> returns url
-      const params = {
-        Bucket: process.env.REACT_APP_AWS_S3_BUCKET,
-        // Key: `${user.id}/${Date.now()}.png`,
-        Key: "test.png",
-        Body: new_image,
-        ContentType: "image/png",
-        ACL: "FULL_CONTROL",
-      };
+  //     //upload blob to aws -> returns url
+  //     const params = {
+  //       Bucket: process.env.REACT_APP_AWS_S3_BUCKET,
+  //       // Key: `${user.id}/${Date.now()}.png`,
+  //       Key: "test.png",
+  //       Body: new_image,
+  //       ContentType: "image/png",
+  //       ACL: "FULL_CONTROL",
+  //     };
 
-      const uploadResult = await s3.upload(params).promise();
-      console.log(uploadResult);
-      const imageUrl = uploadResult.Location;
+  //     const uploadResult = await s3.upload(params).promise();
+  //     console.log(uploadResult);
+  //     const imageUrl = uploadResult.Location;
 
-      const responseLabels = await axios.post("/labels", {
-        image_url: imageUrl,
-        style: formData.labelPrompt,
-        user_id: user.id,
-      });
+  //     const responseLabels = await axios.post("/labels", {
+  //       image_url: imageUrl,
+  //       style: formData.labelPrompt,
+  //       user_id: user.id,
+  //     });
 
-      if (responseLabels.status === 201) {
-        console.log("New label created:", responseLabels);
-        setSelectedImage(null);
-        setFormData({
-          generatedimg: "",
-          style: "",
-          labelPrompt: "",
-        });
-      } else {
-        console.error("Error creating new label:", responseLabels);
-      }
-    } catch (error) {
-      console.error("Error creating new label:", error.response);
-    }
-  };
+  //     if (responseLabels.status === 201) {
+  //       console.log("New label created:", responseLabels);
+  //       setSelectedImage(null);
+  //       setFormData({
+  //         generatedimg: "",
+  //         style: "",
+  //         labelPrompt: "",
+  //       });
+  //     } else {
+  //       console.error("Error creating new label:", responseLabels);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error creating new label:", error.response);
+  //   }
+  // };
 
   //WITHOUT PROXY
   // const downloadImage = async (url, filename) => {
@@ -354,9 +354,7 @@ function LabelMaker({ user }) {
                   src={image.url}
                   alt={`Generated Label ${index + 1}`}
                   className={`w-full object-contain ${
-                    image.url === selectedImage
-                      ? "border-4 border-blue-500"
-                      : ""
+                    image.url === selectedImage ? "border-4 border-red-100" : ""
                   }`}
                   onClick={() =>
                     handleLabelClick(generatedImageIds[index], image.url)
@@ -367,16 +365,16 @@ function LabelMaker({ user }) {
           </div>
           <div className="w-full h-5/6 flex justify-center items-center z-0 relative">
             {selectedImage && (
-              <div className="selected-image-container absolute w-auto transform translate-x-[-23vh] translate-y-[23vh]">
+              <div className="selected-image-container absolute transform translate-x-[-23vh] translate-y-[23vh] image-fit ">
                 <img
                   src={selectedImage}
                   alt="Selected Label"
-                  className="w-auto h-full object-contain transform scale-55 max-w-[86vh] max-h-full"
+                  className="h-full object-contain transform scale-55 max-w-[86vh] max-h-full"
                   style={{
                     position: "absolute",
                     top: "0%",
                     left: "0%",
-                    clipPath: "polygon(8% 0, 94.5% 0, 93% 95%, 9% 100%)",
+                    clipPath: "polygon(8% 0, 92% 0, 90% 95%, 9% 100%)",
                   }}
                 />
               </div>
@@ -384,7 +382,7 @@ function LabelMaker({ user }) {
             <img
               src={wineBottle}
               alt="Wine Bottle"
-              className="h-full object-contain z-10"
+              className="h-full object-contain z-10 wine-bottle-svg"
             />
           </div>
           <div className="transform translate-x-20 w-3/5 h-5/6 px-8 py-8 z-0 float-right mr-8">
@@ -563,6 +561,12 @@ function LabelMaker({ user }) {
                 </div>
 
                 <div className="flex items-center justify-center">
+                  {errorMessage && (
+                    <div className="text-red-500 text-sm mb-4">
+                      {errorMessage}
+                    </div>
+                  )}
+
                   <button
                     className="bg-rectangle-gray hover:scale-105 hover:bg-red-100 text-black font-medium py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     type="submit"

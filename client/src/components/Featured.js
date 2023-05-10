@@ -66,11 +66,11 @@ function Featured() {
   // console.log("designtypes:", designTypes);
   return (
     <div className="featured-container grid grid-cols-3 items-center">
-      <div className="left-images-container">
+      <div className="left-images-container image-fit">
         <img
           src={designTypes[activeIndex].images[0]}
           alt="Left 1"
-          className={`left-20 h-80 w-auto imgstroke-1 fade-image scale-110`}
+          className={`left-20 h-80 imgstroke-1 fade-image scale-110`}
         />
       </div>
 
@@ -117,16 +117,16 @@ function Featured() {
         </div>
       </div>
 
-      <div className="right-images-container z-0 pt-10 pb-10">
+      <div className="right-images-container z-0 pt-10 pb-10 image-fit">
         <img
           src={designTypes[activeIndex].images[1]}
           alt="Right 1"
-          className={`h-80 w-auto bg-color-2 mr-30 imgstroke-3 fade-image scale-110`}
+          className={`h-80 bg-color-2 mr-30 imgstroke-3 fade-image scale-110`}
         />
         <img
           src={designTypes[activeIndex].images[2]}
           alt="Right 2"
-          className={`h-80 w-auto ml-20 mt-6 imgstroke-3 fade-image scale-110`}
+          className={`h-80 ml-20 mt-6 imgstroke-3 fade-image scale-110`}
         />
       </div>
     </div>

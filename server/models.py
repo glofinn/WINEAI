@@ -34,7 +34,7 @@ class User(db.Model, SerializerMixin):
                 raise ValueError('Name must not be empty')
             elif not isinstance(user, str):
                 raise ValueError('Name must be a string')
-            return user
+        return user
         
 
             
@@ -95,9 +95,11 @@ class Wine(db.Model, SerializerMixin):
         elif key in ['grapes', 'region', 'country']:
             if not wine:
                 raise ValueError(f'{key.capitalize()} cannot be blank')
+            
             elif not isinstance(wine, str):
                 raise ValueError(f'{key.capitalize()} cant be a number')
             return wine.lower().capitalize()
+        
             
         
             

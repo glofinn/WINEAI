@@ -94,6 +94,13 @@ img {
   z-index: 5;
 }
 
+.left-images-container img,
+.right-images-container img {
+  width: 100%; /* Set the width of the images to 100% of the container */
+  height: 100%; /* Set the height of the images to 100% of the container */
+  object-fit: cover; /* Maintain the aspect ratio of the images */
+}
+
 .fade-image {
   animation: fade-cycle 4.95s linear infinite;
   opacity: 0;
