@@ -151,7 +151,7 @@ function LabelMaker({ user }) {
         console.log("New wine created:", response.data);
         alert("Wine Created! Check your cellar.");
         setErrorMessage("");
-        navigate("/winecellar");
+        // navigate("/winecellar");
       } else if (response.status === 400) {
         // Validation error
         setErrorMessage(response.data.message);
@@ -344,10 +344,10 @@ function LabelMaker({ user }) {
           To Your Cellar
         </button>
 
-        <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
+        <div className="w-full max-w-8xl mx-auto flex items-center justify-between">
           <div className="relative w-1/3 h-5/6 -ml-16">
             <div className="relative top-0 left-0 w-full h-full bg-gray-400 opacity-50 z-0"></div>
-            <div className="relative top-0 left-0 w-full h-full flex justify-center items-center z-10 flex-col space-y-4 -ml-8">
+            <div className=" image-holder-div relative top-0 left-0 w-full h-full flex justify-center items-center z-10 flex-col space-y-4">
               {generatedImages.map((image, index) => (
                 <img
                   key={index}
@@ -363,18 +363,19 @@ function LabelMaker({ user }) {
               ))}
             </div>
           </div>
-          <div className="w-full h-5/6 flex justify-center items-center z-0 relative">
+          <div className="w-full flex justify-center items-center z-0 relative">
             {selectedImage && (
               <div className="selected-image-container absolute transform translate-x-[-23vh] translate-y-[23vh] image-fit ">
                 <img
                   src={selectedImage}
                   alt="Selected Label"
-                  className="h-full object-contain transform scale-55 max-w-[86vh] max-h-full"
+                  id="test"
+                  className=" larger-generated-image h-full object-contain transform scale-55 max-w-[86vh] max-h-full"
                   style={{
                     position: "absolute",
                     top: "0%",
                     left: "0%",
-                    clipPath: "polygon(8% 0, 92% 0, 90% 95%, 9% 100%)",
+                    // clipPath: "polygon(8vh 0, 75.2vh 0, 74vh 70vw, 8vh 90vw)",
                   }}
                 />
               </div>
@@ -464,7 +465,7 @@ function LabelMaker({ user }) {
                     className="block text-black text-sm font-bold mb-2"
                     htmlFor="name"
                   >
-                    Name
+                    Name:
                   </label>
                   <input
                     className="shadow appearance-none rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-rectangle-gray"
@@ -481,7 +482,7 @@ function LabelMaker({ user }) {
                     className="block text-black text-sm font-bold mb-2"
                     htmlFor="type"
                   >
-                    Type
+                    Type:
                   </label>
                   <input
                     className="shadow appearance-none rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-rectangle-gray"
@@ -498,7 +499,7 @@ function LabelMaker({ user }) {
                     className="block text-black text-sm font-bold mb-2"
                     htmlFor="grapes"
                   >
-                    Grapes
+                    Grapes:
                   </label>
                   <input
                     className="shadow appearance-none rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-rectangle-gray"
@@ -515,7 +516,7 @@ function LabelMaker({ user }) {
                     className="block text-black text-sm font-bold mb-2"
                     htmlFor="region"
                   >
-                    Region
+                    Region:
                   </label>
                   <input
                     className="shadow appearance-none rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-rectangle-gray"
@@ -532,7 +533,7 @@ function LabelMaker({ user }) {
                     className="block text-black text-sm font-bold mb-2"
                     htmlFor="country"
                   >
-                    Country
+                    Country:
                   </label>
                   <input
                     className="shadow appearance-none rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-rectangle-gray"
@@ -548,7 +549,7 @@ function LabelMaker({ user }) {
                     className="block text-black text-sm font-bold mb-2"
                     htmlFor="vintage"
                   >
-                    Vintage
+                    Vintage:
                   </label>
                   <input
                     className="shadow appearance-none rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-rectangle-gray"

@@ -60,7 +60,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   scale: 90%;
 }
-.wine-details__close-btn {
+/* .wine-details__close-btn {
   position: fixed;
   top: 16px;
   right: 16px;
@@ -77,7 +77,7 @@
 .wine-details__close-btn:hover {
   background-color: #ffbe76;
   transform: translateY(-3px);
-}
+} */
 
 .emptybottle {
   position: absolute;
@@ -155,33 +155,3 @@
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
-.edit-form button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: #4a5568;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.edit-form button:hover {
-  background-color: #2d3748;
-}
-
-.edit-form button[type="button"] {
-  background-color: #e2e8f0;
-  color: #4a5568;
-}
-
-.edit-form button[type="button"]:hover {
-  background-color: #cbd5e0;
-}
-
-/* .wine-details__center {
-  width: 20vw;
-  position: relative;
-} */

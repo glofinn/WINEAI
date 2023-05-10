@@ -144,123 +144,142 @@ const WineDetails = ({ onClose, user, setUser }) => {
   }
 
   return (
-    <div className="wine-details w-full h-screen bg-zinc-200">
-      {isLoading && (
-        <div className="loading-overlay">
-          <img src={spinningbottle} alt="Loading..." className="spinning-svg" />
-        </div>
-      )}
-      <Navbar user={user} setUser={setUser} />
-      {showEditForm && (
-        <>
-          <div className="form-background"></div>
-          <div className="form-wrapper">
-            <form onSubmit={handleSubmit} className="edit-form ">
-              <label htmlFor="name">Name:</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                defaultValue={wine.name}
-                onChange={handleInputChange}
-              />
-
-              <label htmlFor="type">Type:</label>
-              <input
-                type="text"
-                id="type"
-                name="type"
-                defaultValue={wine.type}
-                onChange={handleInputChange}
-              />
-
-              <label htmlFor="region">Region:</label>
-              <input
-                type="text"
-                id="region"
-                name="region"
-                defaultValue={wine.region}
-                onChange={handleInputChange}
-              />
-
-              <label htmlFor="country">Country:</label>
-              <input
-                type="text"
-                id="country"
-                name="country"
-                defaultValue={wine.country}
-                onChange={handleInputChange}
-              />
-
-              <label htmlFor="grapes">Grapes:</label>
-              <input
-                type="text"
-                id="grapes"
-                name="grapes"
-                defaultValue={wine.grapes}
-                onChange={handleInputChange}
-              />
-
-              <label htmlFor="bottle">Bottle:</label>
-              <input
-                type="file"
-                id="bottle"
-                name="bottle"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-              <button type="submit">Update</button>
-              <button type="button" onClick={() => setShowEditForm(false)}>
-                Cancel
-              </button>
-            </form>
+    <div className="bg-zinc-200 w-full h-full">
+      <div className="wine-details w-full h-screen bg-zinc-200">
+        {isLoading && (
+          <div className="loading-overlay">
+            <img
+              src={spinningbottle}
+              alt="Loading..."
+              className="spinning-svg"
+            />
           </div>
-        </>
-      )}
-      <div className="wine-details__left">
-        <h2 className="wine-title font-mono font-bold">{wine.name}</h2>
-        <p className="font-mono font-medium">Type: {wine.type}</p>
-        <p className="font-mono font-medium">Grapes: {wine.grapes}</p>
-        <p className="font-mono font-medium">
-          Conceived: {wine.region}, {wine.country}
-        </p>
-        <p className="font-mono font-medium">Vintage: {wine.vintage}</p>
+        )}
+        <Navbar user={user} setUser={setUser} />
+        {showEditForm && (
+          <>
+            <div className="form-background"></div>
+            <div className="form-wrapper">
+              <form onSubmit={handleSubmit} className="edit-form font-mono">
+                <label htmlFor="name">Name:</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  defaultValue={wine.name}
+                  onChange={handleInputChange}
+                />
+
+                <label htmlFor="type">Type:</label>
+                <input
+                  type="text"
+                  id="type"
+                  name="type"
+                  defaultValue={wine.type}
+                  onChange={handleInputChange}
+                />
+
+                <label htmlFor="region">Region:</label>
+                <input
+                  type="text"
+                  id="region"
+                  name="region"
+                  defaultValue={wine.region}
+                  onChange={handleInputChange}
+                />
+
+                <label htmlFor="country">Country:</label>
+                <input
+                  type="text"
+                  id="country"
+                  name="country"
+                  defaultValue={wine.country}
+                  onChange={handleInputChange}
+                />
+
+                <label htmlFor="grapes">Grapes:</label>
+                <input
+                  type="text"
+                  id="grapes"
+                  name="grapes"
+                  defaultValue={wine.grapes}
+                  onChange={handleInputChange}
+                />
+
+                <label htmlFor="bottle">Bottle:</label>
+                <input
+                  type="file"
+                  id="bottle"
+                  name="bottle"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+                <button
+                  className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4 font-mono font-medium hover:bg-red-100"
+                  type="submit"
+                >
+                  Update
+                </button>
+                <button
+                  className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4 font-mono font-medium hover:bg-red-100"
+                  type="button"
+                  onClick={() => setShowEditForm(false)}
+                >
+                  Cancel
+                </button>
+              </form>
+            </div>
+          </>
+        )}
+        <div className="wine-details__left">
+          <h2 className="wine-title font-mono font-bold">{wine.name}</h2>
+          <p className="font-mono font-medium">Type: {wine.type}</p>
+          <p className="font-mono font-medium">Grapes: {wine.grapes}</p>
+          <p className="font-mono font-medium">
+            Conceived: {wine.region}, {wine.country}
+          </p>
+          <p className="font-mono font-medium">Vintage: {wine.vintage}</p>
+        </div>
+        <div className="wine-details__center font-mono">
+          <img
+            src={wine.bottle}
+            alt={`${wine.name} bottle`}
+            className="wine-bottle"
+          />
+          <img
+            src={Emptybottle}
+            className="emptybottle"
+            alt="Blank bottle"
+          ></img>
+        </div>
+        <div className="wine-details__right">
+          <p className="wine-details__story font-mono">{wine.story}</p>
+        </div>
+        <button
+          className="oval-button font-mono hover:bg-red-100"
+          onClick={() => {
+            navigate("/winecellar");
+          }}
+          style={{ zIndex: 1000 }}
+        >
+          Back
+        </button>
+        <div
+          className="fixed top-0 left-0 w-1/4 h-full bg-rectangle-gray opacity-50 z-0"
+          style={{ zIndex: "0" }}
+        ></div>
+        <div
+          className="fixed top-0 right-0 w-1/4 h-full bg-rectangle-gray opacity-50 z-0"
+          style={{ zIndex: "0" }}
+        ></div>
+        <button
+          className="oval-button-edit font-mono hover:bg-red-100"
+          onClick={() => setShowEditForm(true)}
+          style={{ zIndex: 1000 }}
+        >
+          Edit
+        </button>
       </div>
-      <div className="wine-details__center font-mono">
-        <img
-          src={wine.bottle}
-          alt={`${wine.name} bottle`}
-          className="wine-bottle"
-        />
-        <img src={Emptybottle} className="emptybottle" alt="Blank bottle"></img>
-      </div>
-      <div className="wine-details__right">
-        <p className="wine-details__story font-mono">{wine.story}</p>
-      </div>
-      <button
-        className="oval-button font-mono hover:bg-red-100"
-        onClick={() => {
-          navigate("/winecellar");
-        }}
-        style={{ zIndex: 1000 }}
-      >
-        Back
-      </button>
-      <div
-        className="fixed top-0 left-0 w-1/4 h-full bg-rectangle-gray opacity-50 z-0"
-        style={{ zIndex: "0" }}
-      ></div>
-      <div
-        className="fixed top-0 right-0 w-1/4 h-full bg-rectangle-gray opacity-50 z-0"
-        style={{ zIndex: "0" }}
-      ></div>
-      <button
-        className="oval-button-edit font-mono hover:bg-red-100"
-        onClick={() => setShowEditForm(true)}
-        style={{ zIndex: 1000 }}
-      >
-        Edit
-      </button>
     </div>
   );
 };

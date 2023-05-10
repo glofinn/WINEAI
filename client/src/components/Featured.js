@@ -70,7 +70,7 @@ function Featured() {
         <img
           src={designTypes[activeIndex].images[0]}
           alt="Left 1"
-          className={`left-20 h-80 imgstroke-1 fade-image scale-110`}
+          className={`left-20 h-80 imgstroke-1 fade-image scale-100`}
         />
       </div>
 

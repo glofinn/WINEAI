@@ -132,12 +132,6 @@
   justify-content: center;
 }
 
-.selected-image-container {
-  position: relative;
-  width: 40vh; /* Adjust this value to your needs */
-  height: 90vh; /* Adjust this value to your needs */
-}
-
 .featured-title {
   text-align: center;
   margin-bottom: 1rem;
@@ -182,7 +176,22 @@
   align-items: center;
 }
 
+#test {
+  clip-path: polygon(8vh 0, 75.2vh 0, 74vh 70vw, 10vh 90vw);
+}
+
+.image-holder-div {
+  margin-left: -2rem;
+}
+
+.selected-image-container {
+  position: relative;
+  width: 40vh;
+  height: 90vh;
+}
+
 /* App.css */
+
 @media (max-width: 1200px) {
   .wineaititle-heading {
     font-size: 6rem;
@@ -198,5 +207,21 @@
 @media (max-width: 768px) {
   .wineaititle-heading {
     font-size: 3rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  #test {
+    clip-path: polygon(8vh 0, 75.2vh 0, 78vh 100vw, 8vh 80vw);
+  }
+  .selected-image-container {
+    scale: 70%;
+    position: relative;
+    width: 40vh;
+    height: 90vh;
+    /* transform: translateX(-15vw); */
+  }
+  .image-holder-div {
+    margin-left: -10rem;
   }
 }
