@@ -212,16 +212,16 @@
 
 @media (min-width: 1600px) {
   #test {
-    clip-path: polygon(8vh 0, 75.2vh 0, 78vh 100vw, 8vh 80vw);
+    clip-path: polygon(8vh 0, 75.9vh 0, 78vh 100vw, 8vh 80vw);
   }
   .selected-image-container {
-    scale: 70%;
+    scale: 102%;
     position: relative;
     width: 40vh;
     height: 90vh;
     /* transform: translateX(-15vw); */
   }
   .image-holder-div {
-    margin-left: -10rem;
+    margin-left: -5rem;
   }
 }
