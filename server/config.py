@@ -14,7 +14,7 @@ db = SQLAlchemy(metadata=metadata)
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
-CORS(app)
+CORS(app, origins=['http://localhost:4000'])
 
 app.config['SECRET_KEY']='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'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'

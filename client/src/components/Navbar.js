@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../WINESRCS/titlelogo.svg";
+import logo from "../WINESRCS/titlelogo2.svg";
 import "../App.css";
 
 function Navbar({ user, setUser }) {
@@ -29,7 +29,7 @@ function Navbar({ user, setUser }) {
       }
 
       setUser(null);
-      window.location.reload();
+      navigate("/");
     } catch (error) {
       console.error("Error logging out: ", error);
     }
@@ -38,17 +38,16 @@ function Navbar({ user, setUser }) {
   return (
     <div className="Navbar fixed top-0 left-0 w-full bg-white shadow-md z-10">
       <div className="flex justify-between items-center h-16 mx-8">
-        <div
-          className="flex items-center logo-container"
-          onClick={handleHomeClick}
-        >
-          <img src={logo} alt="Logo" className="h-8 w-auto mr-2" />
-          <h1 className="text-lg font-semi-bold text-text-black">WineAI</h1>
+        <div className="relative logo-container" onClick={handleHomeClick}>
+          <img src={logo} alt="Logo" className="h-8 w-auto" />
+          <h1 className="text-lg font-semi-bold text-text-black absolute left-3 top-0.5 font-mono">
+            WineAI
+          </h1>
         </div>
         <div>
           {user == null && (
             <button
-              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4"
+              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4 font-mono font-medium hover:bg-red-100"
               onClick={handleLoginClick}
             >
               Login
@@ -56,7 +55,7 @@ function Navbar({ user, setUser }) {
           )}
           {user && (
             <button
-              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4"
+              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4 font-mono font-medium hover:bg-red-100"
               onClick={handleLogout}
             >
               Logout
@@ -64,7 +63,7 @@ function Navbar({ user, setUser }) {
           )}
           {user === null && (
             <button
-              className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded"
+              className="bg-sky-800 font-semi-bold text-white py-2 px-4 rounded font-mono font-medium hover:bg-red-100"
               onClick={handleSignupClick}
             >
               Signup

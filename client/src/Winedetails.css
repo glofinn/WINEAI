@@ -1,0 +1,157 @@
+.wine-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 32px;
+  padding: 3vw;
+  background-color: #f7f7f7;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding-top: 20vh;
+  align-items: start;
+}
+
+.wine-title {
+  font-size: x-large;
+  padding-bottom: 10px;
+}
+
+.winecard__name {
+  z-index: 999;
+}
+
+.wine-details__left,
+.wine-details__right {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-wrap: break-word;
+  max-width: 100%;
+  word-wrap: break-word;
+  z-index: 5;
+  transition: all 0.3s ease;
+}
+
+.wine-details__left:hover,
+.wine-details__right:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.wine-details__left > p,
+.wine-details__right > p {
+  margin-bottom: 12px;
+  color: #5c5c5c; /* Adjusted color for a sleek look */
+}
+
+.wine-details__left > p:last-child,
+.wine-details__right > p:last-child {
+  margin-bottom: 0;
+}
+
+.wine-details__image {
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  scale: 90%;
+}
+/* .wine-details__close-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  background-color: #f9aa33;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.wine-details__close-btn:hover {
+  background-color: #ffbe76;
+  transform: translateY(-3px);
+} */
+
+.emptybottle {
+  position: absolute;
+  z-index: 1;
+  width: 20vw;
+  height: auto;
+  /* scale: 50%; */
+  /* max-height: 1200px; */
+  object-fit: cover;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.wine-bottle {
+  scale: 25%;
+  position: absolute;
+  left: 0vw;
+  top: -33vh;
+  clip-path: polygon(10% 0, 90% 0, 89% 100%, 11% 100%);
+  width: 100%;
+  height: auto;
+}
+
+.edit-button {
+  position: absolute;
+  bottom: 20px;
+  right: 100px;
+  background-color: #f9aa33;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  padding: 6px 12px;
+}
+
+.form-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.form-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+  align-items: center;
+  justify-items: start;
+}
+
+.edit-form label {
+  font-weight: bold;
+}
+
+.edit-form input[type="text"],
+.edit-form input[type="file"] {
+  width: 100%;
+  padding: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

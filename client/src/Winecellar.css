@@ -1,0 +1,19 @@
+.winecellar {
+  text-align: center;
+}
+
+.winecellar__title {
+  font-size: 36px;
+  margin-bottom: 24px;
+}
+
+.winecellar__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.wineai-heading {
+  padding-top: 75px;
+}

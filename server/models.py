@@ -7,6 +7,8 @@ from config import bcrypt, db, app
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
+    serialize_rules = ('-wines', '-labels')
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     name = db.Column(db.String,)
@@ -32,7 +34,7 @@ class User(db.Model, SerializerMixin):
                 raise ValueError('Name must not be empty')
             elif not isinstance(user, str):
                 raise ValueError('Name must be a string')
-            return user
+        return user
         
 
             
@@ -58,6 +60,7 @@ class WineLabel(db.Model, SerializerMixin):
     image_url = db.Column(db.String)
     style = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     user = db.relationship("User", back_populates="labels")
 
@@ -73,6 +76,9 @@ class Wine(db.Model, SerializerMixin):
     region = db.Column(db.String)
     country = db.Column(db.String)
     story = db.Column(db.String)
+    bottle = db.Column(db.String)
+    vintage = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
     label_id = db.Column(db.Integer, db.ForeignKey('winelabels.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
@@ -80,31 +86,21 @@ class Wine(db.Model, SerializerMixin):
 
     @validates('type', 'grapes', 'region', 'country')
     def validate_wine(self, key, wine):
-        if (key == 'type'):
+        if key == 'type':
             if not wine:
                 raise ValueError('Type cannot be blank')
-            elif wine not in ['Red', 'White','Orange', 'Petnat']:
+            elif wine.lower() not in ['red', 'white', 'orange', 'petnat']:
                 raise ValueError("Type must be either 'Red', 'White', 'Orange' or 'Petnat'")
-            return wine
-        if (key == 'grapes'):
+            return wine.lower().capitalize()
+        elif key in ['grapes', 'region', 'country']:
             if not wine:
-                raise ValueError('Grapes cannot be blank')
+                raise ValueError(f'{key.capitalize()} cannot be blank')
+            
             elif not isinstance(wine, str):
-                raise ValueError('Grapes cant be a number')
-            return wine
-        if (key == 'region'):
-            if not wine:
-                raise ValueError('Region cannot be blank')
-            elif not isinstance(wine, str):
-                raise ValueError('Region cant be a number')
-            return wine
-        if (key == 'country'):
-            if not wine:
-                raise ValueError('Country cannot be blank')
-            elif not isinstance(wine, str):
-                raise ValueError('Country cant be a number')
-            return wine
+                raise ValueError(f'{key.capitalize()} cant be a number')
+            return wine.lower().capitalize()
         
+            
         
             
         

@@ -3,32 +3,47 @@ import Featured from "./Featured";
 import LabelMaker from "./LabelMaker";
 import Navbar from "./Navbar";
 // import titlelogo from "../WINESRCS/titlelogo.svg";
+import Winedrawing from "../WINESRCS/winedrawing.svg";
 import "../App.css";
 
 function Home({ user, setUser }) {
   return (
     <>
-      <Navbar user={user} setUser={setUser} />
-      <div className="relative bg-zinc-200 w-full h-screen">
-        {/* <div className="absolute top-0 left-0 m-5">
-          <img
-            src={titlelogo}
-            alt="Logo"
-            className="inline-block h-10 w-auto"
-          />
-          <span className="text-lg font-bold m1-2">WineAI</span>
-        </div> */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center">
-          <h6 className="text-xs font-semibold uppercase tracking-wider mb-1 text-center">
-            Welcome You Alcoholic
-          </h6>
-          <h1 className="text-8xl font-bold text-center wineai-heading">
-            WineAI
-          </h1>
+      <Navbar user={user} setUser={setUser} style={{ zIndex: 100 }} />
+      <div className="home-featured-container">
+        <div className="flex items-center justify-center bg-zinc-200 w-full h-screen">
+          <div className="flex flex-col items-center justify-center">
+            <h6 className="text-[0.5vw] font-semibold uppercase tracking-wider mb-1 text-center">
+              {user
+                ? `Welcome back ${user.name}!`
+                : `Welcome! Please Login/Signup`}
+            </h6>
+            <h1 className="text-[5.5vw] font-bold text-center wineaititle-heading">
+              <img
+                src={Winedrawing}
+                alt="Background SVG"
+                className="w-full h-full inset-0 z-0 mr-4"
+              />
+              WineAI
+            </h1>
+          </div>
+        </div>
+        <h1 className="text-[5.5vw] font-bold text-center bg-zinc-200 w-full pt-5 pb-5 italic">
+          Featured Labels
+        </h1>
+        <div className="bg-zinc-200 w-full h-screen justify-center">
+          {/* <h2 className="featured-title font-mono text-center justify-center ">
+            Browse Random Designs
+          </h2> */}
+          <Featured />
         </div>
       </div>
-      <Featured />
-      <LabelMaker user={user} />
+      <h1 className="text-[5.5vw] font-bold text-center pt-20 bg-zinc-200 italic">
+        LabelMaker
+      </h1>
+      <div className="label-maker-container bg-zinc-200">
+        <LabelMaker user={user} className="label-maker" />
+      </div>
     </>
   );
 }

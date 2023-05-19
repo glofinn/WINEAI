@@ -27,7 +27,11 @@ function Signup() {
     })
       .then((res) => res.json())
       .then((data) => setUser(data));
-    navigate("/login");
+    navigate("/login", {
+      state: {
+        confirmationMessage: "Account created successfully! Please log in.",
+      },
+    });
   };
 
   const handleInputChange = (e) => {
@@ -41,14 +45,14 @@ function Signup() {
   return (
     <div className="bg-gray-200 min-h-screen flex flex-col justify-center items-center">
       <Navbar />
-      <h1 className="text-3xl font-bold mb-8">Join WineAI</h1>
+      <h1 className="text-3xl font-bold mb-8 font-mono">Join WineAI</h1>
       <form
-        className="bg-custom-gray p-8 rounded-md shadow-md max-w-lg w-full mx-auto border-8 border-custom-black p-6 text-black"
+        className="bg-custom-gray p-8 rounded-md shadow-md max-w-lg w-full mx-auto border-8 border-custom-black text-black font-mono"
         onSubmit={handleSubmit}
       >
         <div className="mb-4">
           <label htmlFor="username" className="block text-black font-bold mb-2">
-            Username
+            Username:
           </label>
           <input
             type="text"
@@ -64,7 +68,7 @@ function Signup() {
             htmlFor="fullName"
             className="block text-black font-bold mb-2 "
           >
-            Full Name
+            Name:
           </label>
           <input
             type="text"
@@ -77,7 +81,7 @@ function Signup() {
         </div>
         <div className="mb-4">
           <label htmlFor="password" className="block text-black font-bold mb-2">
-            Password
+            Password:
           </label>
           <input
             type="password"
@@ -90,13 +94,22 @@ function Signup() {
         </div>
         <button
           type="submit"
-          className="bg-gray-700 text-white py-2 px-4 rounded font-bold"
+          className="bg-rectangle-gray font-semi-bold text-text-black py-2 px-4 rounded mr-4 font-mono font-medium hover:bg-red-100"
         >
           Sign up
         </button>
       </form>
       <div className="fixed top-0 left-0 w-1/4 h-full bg-rectangle-gray opacity-50 z-0"></div>
       <div className="fixed top-0 right-0 w-1/4 h-full bg-rectangle-gray opacity-50 z-0"></div>
+      <button
+        className="oval-button font-mono hover:bg-red-100"
+        onClick={() => {
+          navigate("/");
+        }}
+        style={{ zIndex: 1000 }}
+      >
+        Back
+      </button>
     </div>
   );
 }

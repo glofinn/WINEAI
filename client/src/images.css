@@ -1,0 +1,32 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Media queries to handle different screen sizes */
+@media (max-width: 1024px) {
+  .selected-image-container img {
+    transform: scale(0.45);
+  }
+
+  .float-right {
+    width: 60%;
+  }
+}
+
+@media (max-width: 768px) {
+  .selected-image-container img {
+    transform: scale(0.35);
+  }
+
+  .float-right {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .selected-image-container img {
+    transform: scale(0.25);
+  }
+}
