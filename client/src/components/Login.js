@@ -37,7 +37,7 @@ function Login({ setUser }) {
       })
       .then((data) => {
         setUser(data);
-        navigate("/");
+        navigate("/"); // Navigate only on successful login
       })
       .catch((error) => {
         console.error("Error during fetch:", error);
@@ -108,9 +108,9 @@ function Login({ setUser }) {
       <div className="fixed top-0 right-0 w-1/4 h-full bg-rectangle-gray opacity-50 z-0"></div>
       <button
         className="oval-button font-mono hover:bg-red-100"
-        onClick={() => {
-          navigate("/");
-        }}
+        // onClick={() => {
+        //   navigate("/");
+        // }}
         style={{ zIndex: 1000 }}
       >
         Back
