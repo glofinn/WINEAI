@@ -2,7 +2,6 @@ import React from "react";
 import Featured from "./Featured";
 import LabelMaker from "./LabelMaker";
 import Navbar from "./Navbar";
-// import titlelogo from "../WINESRCS/titlelogo.svg";
 import Winedrawing from "../WINESRCS/winedrawing.svg";
 import "../App.css";
 
@@ -32,9 +31,6 @@ function Home({ user, setUser }) {
           Featured Labels
         </h1>
         <div className="bg-zinc-200 w-full h-screen justify-center">
-          {/* <h2 className="featured-title font-mono text-center justify-center ">
-            Browse Random Designs
-          </h2> */}
           <Featured />
         </div>
       </div>

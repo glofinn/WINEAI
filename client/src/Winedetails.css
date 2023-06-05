@@ -60,24 +60,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   scale: 90%;
 }
-/* .wine-details__close-btn {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  background-color: #f9aa33;
-  border: none;
-  border-radius: 4px;
-  color: #fff;
-  font-size: 14px;
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.wine-details__close-btn:hover {
-  background-color: #ffbe76;
-  transform: translateY(-3px);
-} */
 
 .emptybottle {
   position: absolute;
@@ -96,7 +78,7 @@
   scale: 25%;
   position: absolute;
   left: 0vw;
-  top: -33vh;
+  top: -25vh;
   clip-path: polygon(10% 0, 90% 0, 89% 100%, 11% 100%);
   width: 100%;
   height: auto;
